@@ -1,0 +1,132 @@
+.aboutProject {
+    display: flex;
+    flex-direction: column;
+    margin: 0 70px;
+    padding: 110px 0;
+    color: #000000;
+}
+
+.aboutProject__title {
+    margin: 0;
+    padding: 0 0 23px;
+    font-family: 'Inter';
+    font-weight: 400;
+    font-size: 22px;
+    line-height: 1.2;
+    text-align: left;
+    letter-spacing: -0.04em;
+    border-bottom: 1px solid #000000;
+}
+
+.aboutProject__container {
+    display: flex;
+    flex-direction: column;
+    margin: 70px auto 0;
+}
+
+.aboutProject__content {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: repeat(2, 1fr);
+    column-gap: 40px;
+    row-gap: 26px;
+    margin: 0 auto 110px;
+}
+
+.aboutProject__content_type_title {
+    font-family: 'Inter';
+    font-weight: 400;
+    font-size: 20px;
+    line-height: 1.2;
+    text-align: left;
+    letter-spacing: -0.04em;
+    padding: 0;
+    margin: 0;
+}
+
+.aboutProject__content_type_text {
+    font-family: 'Inter';
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 1.4;
+    text-align: left;
+    padding: 0;
+    margin: 0;
+}
+
+.aboutProject__scheme {
+    display: grid;
+    grid-template-columns: 1fr 4fr;
+    grid-template-rows: repeat(2, 1fr);
+    row-gap: 5px;
+    text-align: center;
+    color: #A0A0A0;
+}
+
+.aboutProject__scheme-text {
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 1.2;
+    margin: 0;
+    padding: 9px 0;
+}
+
+.aboutProject__scheme-text_type_green {
+    background-color: #2BE080;
+    color: #000000;
+}
+
+.aboutProject__scheme-text_type_grey {
+    background-color: #F2F2F2;
+    color: #000000;
+}
+
+@media screen and (max-width: 600px) {
+    .aboutProject {
+        margin: 0 18px;
+        padding: 70px 0;
+    }
+
+    .aboutProject__title {
+        padding: 0 0 28px;
+        font-size: 18px;
+    }
+
+    .aboutProject__container {
+        margin: 60px auto 0;
+    }
+
+    .aboutProject__content {
+        grid-template-columns: repeat(1, 1fr);
+        grid-template-rows: 4;
+        row-gap: 16px;
+        margin: 0 auto 60px;
+    }
+
+    .aboutProject__content_type_title {
+        font-size: 18px;
+    }
+
+    .aboutProject__content_type_title:nth-of-type(2) {
+        grid-row: 3;
+        margin-top: 56px;
+    }
+
+    .aboutProject__content_type_text {
+        font-size: 11px;
+        line-height: 1.45;
+    }
+
+    .aboutProject__scheme {
+        row-gap: 0;
+    }
+
+    .aboutProject__scheme-text {
+        font-size: 11px;
+        padding: 11px 0;
+    }
+
+    .aboutProject__scheme-text_type_grey {
+        padding: 10px 0;
+    }
+}

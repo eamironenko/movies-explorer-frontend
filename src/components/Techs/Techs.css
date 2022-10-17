@@ -1,0 +1,127 @@
+.techs {
+    display: flex;
+    flex-direction: column;
+    margin: 0 70px;
+    padding: 100px 0;
+    background-color: #F5F5F5;
+    color: #000000;
+}
+
+.techs__title {
+    margin: 0;
+    padding: 0 0 23px;
+    font-family: 'Inter';
+    font-weight: 400;
+    font-size: 22px;
+    line-height: 1.2;
+    text-align: left;
+}
+
+.techs__container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    margin: 90px auto 0;
+}
+
+.techs__title {
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 50px;
+    line-height: 1.2;
+    margin: 0 auto;
+    padding: 0;
+}
+
+.techs__text {
+    width: 67%;
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 1.4;
+    text-align: center;
+    margin: 26px auto 100px;
+    padding: 0
+}
+
+.techs__themes {
+    display: grid;
+    grid-template-columns: repeat(7, 90px);
+    column-gap: 10px;
+    margin: 0 auto;
+}
+
+.techs_theme {
+    padding: 21px 0 22px;
+    margin: 0;
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 1.2;
+    text-align: center;
+    letter-spacing: -0.04em;
+    background-color: #E8E8E8;
+    border-radius: 10px;
+}
+
+@media screen and (max-width: 900px) {
+    .techs {
+        padding: 90px 0;
+        margin: 0 50px;
+    }
+
+    .techs__container {
+        margin: 80px auto 0;
+    }
+
+    .techs__text {
+        margin: 26px auto 83px;
+        font-size: 12px;
+        line-height: 1.5;
+        width: 60%;
+    }
+
+    .techs__themes {
+        grid-template-columns: repeat(7, 84px);
+    }
+
+    .techs_theme {
+        padding: 21px 0;
+    }
+}
+
+@media screen and (max-width: 600px) {
+    .tech {
+        padding: 70px 0;
+        margin: 0 18px;
+    }
+
+    .techs__title {
+        font-size: 30px;
+    }
+
+    .techs__container {
+        margin: 60px auto 0;
+    }
+
+    .techs__text {
+        margin: 24px auto 50px;
+        font-size: 11px;
+        line-height: 1.45;
+        width: 100%;
+    }
+
+    .techs__themes {
+        grid-template-columns: repeat(2, 84px);
+        grid-template-rows: repeat(4, 57px);
+        row-gap: 10px;
+    }
+
+    .techs_theme {
+        font-size: 12px;
+    }
+
+}
