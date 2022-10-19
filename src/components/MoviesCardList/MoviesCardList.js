@@ -12,7 +12,7 @@ function MoviesCardList({cards, saveButton}) {
         <section className="moviesCardList">
             <ul className="moviesCardList__container">
                 {newCards.map((item) => (
-                    <MoviesCard card={item} saveButton={saveButton}/>
+                    <MoviesCard card={item} logoButton={saveButton}/>
                 ))}
             </ul>
             <Switch>

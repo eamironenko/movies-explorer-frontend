@@ -21,7 +21,7 @@ function Movies() {
     return (
         <div className='movies'>
             <SearchForm />
-            <MoviesCardList cards={cards} saveButton={saveButton} />
+            <MoviesCardList cards={cards} logoButton={saveButton} />
         </div>
     )
 }
