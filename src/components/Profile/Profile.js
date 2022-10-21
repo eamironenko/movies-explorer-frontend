@@ -1,6 +1,8 @@
-import './Profile.css';
 import React from 'react';
-import { isDisabled } from '@testing-library/user-event/dist/utils';
+import './Profile.css';
+import useForm from '../../utils/useForm';
+import validate from '../../utils/validation'
+
 const name = "Виталий";
 const email = "pochta@yandex.ru";
 
@@ -13,8 +15,10 @@ function Profile() {
         handleSubmit
     } = useForm(editProfile, validate, "ep");
 
-    const handleEdit() {
-        setIsDisable(false);
+    const [isDisabled, setIsDisabled]=React.useState(true);
+
+    function handleEdit() {
+        setIsDisabled(false);
     }
 
     function editProfile() {
