@@ -1,0 +1,32 @@
+.root {
+    color: #A0A0A0;
+    max-width: 1280px;
+    margin: 0 auto;
+    font-family: Inter, Arial, Helvetica, sans-serif;
+    background-color: #FFFFFF;
+    -moz-osx-font-smoothing: grayscale;
+    -webkit-font-smoothing: antialiased;
+    -webkit-text-size-adjust: 100%;
+    -ms-text-size-adjust: 100%;
+    -moz-text-size-adjust: 100%;
+    text-rendering: optimizeLegibility;
+}
+
+@media (max-width: 1024px) {
+    .page {
+        max-width: 1024px;
+    }
+}
+
+@media (max-width: 768px) {
+    .page {
+        max-width: 768px;
+    }
+}
+
+@media (max-width: 320px) {
+    .page {
+        max-width: 320px;
+    }
+}
+
