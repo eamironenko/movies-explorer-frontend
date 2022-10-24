@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom/client';
 import { BrowserRouter } from 'react-router-dom';
 import '../src/vendor/fonts/fonts.css';
 import '../src/vendor/normalize.css';
-import App from './components/App/App';
+import App from './components/App/App.js';
 //import './index.css';
 //import reportWebVitals from './reportWebVitals';
 

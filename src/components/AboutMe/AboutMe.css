@@ -30,7 +30,7 @@
 .aboutMe__photo {
     height: 307px;
     width: 255px;
-    background-image: url(./image/pic__photo.svg);
+    background-image: url(../../images/pic_photo.svg);
     background-size: cover;
     margin: 0;
     padding: 0;

@@ -32,7 +32,7 @@ const Register = ({ onRegister}) => {
             value={values.name || ''}
             onChange={handleChange}
             required />
-          <span className={`${errors.name ? 'register__text register__text_error' : 'register__text_visible'}`}>{errors.name}</span>
+          <span className={`${errors.name ? 'register__text register__text_error' : 'register__text_visible'}`}>Что-то пошло не так...</span>
           <label className="register__text" htmlFor='userEmail'>E-mail</label>
           <input className="register__inputs register__inputs_email"
             id="userEmail"
@@ -41,7 +41,7 @@ const Register = ({ onRegister}) => {
             value={values.email || ''}
             onChange={handleChange}
             required />
-          <span className={`${errors.email ? 'register__text register__text_error' : 'register__text_visible'}`}>{errors.email}</span>
+          <span className={`${errors.email ? 'register__text register__text_error' : 'register__text_visible'}`}>Что-то пошло не так...</span>
           <label className="register__text" htmlFor='userPassword'>Пароль</label>
           <input className="register__inputs register__inputs_password"
             id="userPassword"
@@ -50,12 +50,11 @@ const Register = ({ onRegister}) => {
             value={values.password || ''}
             onChange={handleChange}
             required />
-            <span className={`${errors.password ? 'register__text register__text_error' : 'register__text_visible'}`}>{errors.password}</span>
+            <span className={`${errors.password ? 'register__text register__text_error' : 'register__text_visible'}`}>Что-то пошло не так...</span>
           <span className="register__text register__text_error register__text_visible">Что-то пошло не так ...</span>
           <button className={`${isValid ? 'register__submit-button' : 'register__submit-button '}`} type="submit" disabled={!isValid}>Зарегистрироваться</button>
-          <button className="register__submit-button" type="submit" disabled={!isValid}>Зарегистрироваться</button>
-          <p className="register__text register__text_result">Уже зарегистрированы?
-            <Link to='/sign-up' className="register__text register__text_link">Войти</Link>
+          <p className="register__text register__text_result">Уже зарегистрированы?&nbsp;
+            <Link to='/sign-in' className="register__text register__text_link">Войти</Link>
           </p>
         </form>
       </section>

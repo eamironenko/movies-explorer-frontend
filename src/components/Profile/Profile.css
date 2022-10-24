@@ -2,7 +2,6 @@
     box-sizing: border-box;
     margin: 0;
     padding: 0;
-    border: 1px solid greenyellow;
 }
 
 .profile__form {
@@ -13,7 +12,6 @@
     margin: 74px auto 70px;
     background-color: #FFFFFF;
     color: #000000;
-    border: 1px solid blue;
 }
 
 .profile__title {

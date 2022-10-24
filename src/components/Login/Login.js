@@ -1,8 +1,9 @@
 import React from "react";
+import { Link } from "react-router-dom";
+
 import './Login.css';
 import useForm from '../../utils/useForm';
 import validate from '../../utils/validation';
-import { Link } from "react-dom";
 import loginLogo from '../../images/login_logo.svg'
 
 const Login = ({ onLogin, errorLogin, error }) => {
@@ -30,7 +31,7 @@ const Login = ({ onLogin, errorLogin, error }) => {
                     value={values.email || ''}
                     onChange={handleChange}
                     required />
-                <span className={`${errors.email ? 'login__text login__text_error' : 'login__text_visible'}`}>{errors.email}</span>
+                <span className={`${errors.email ? 'login__text login__text_error' : 'login__text_visible'}`}>Что-то пошло не так...</span>
                 <label className="login__text" htmlFor="userPassword">Пароль</label>
                 <input className="login__inputs login__inputs_password"
                     id="userPassword"
@@ -39,10 +40,9 @@ const Login = ({ onLogin, errorLogin, error }) => {
                     value={values.password || ''}
                     onChange={handleChange}
                     required />
-                <span className={`${errors.password ? 'login__text login__text_error' : 'login__text_visible'}`}>{errors.password}</span>
-                <button className={`${isValid ? 'login__submit-button' : 'login__submit-button login__submit-button_disabled' }`} type="submit" disabled={!isValid}>Войти</button>
-                <button className="login__submit-button">Войти</button>
-                <p className="login__text login__text_result">Eще не зарегистрированы?
+                <span className={`${errors.password ? 'login__text login__text_error' : 'login__text_visible'}`}>Что-то пошло не так...</span>
+                <button className={`${isValid ? 'login__submit-button' : 'login__submit-button login__submit-button_disabled'}`} type="submit" disabled={!isValid}>Войти</button>
+                <p className="login__text login__text_result">Eще не зарегистрированы?&nbsp;
                     <Link to='/sign-up' className="login__text login__text_link">Регистрация</Link>
                 </p>
             </form>

@@ -43,7 +43,7 @@
     width: 30px;
     height: 30px;
     padding: 0;
-    background-image: url(./image/movie_save.svg);
+    background-image: url(../../images/movie_save.svg);
     border: none;
     background-color: #FFFFFF;
     cursor: pointer;
@@ -51,7 +51,7 @@
 }
 
 .moviesCardList__save_active {
-    background-image: url(./image/movie_save_active.svg);
+    background-image: url(../../images/movie_save_active.svg);
 }
 
 .moviesCardList_card {
