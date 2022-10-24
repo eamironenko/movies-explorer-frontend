@@ -4,5 +4,6 @@
     font-size: 14px;
     line-height: 1.14;
     border: none;
-    background-color: none;
+    background-color: #F9F9F9;
+    border-radius: 20px;
 }

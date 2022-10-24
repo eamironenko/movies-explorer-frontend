@@ -1,44 +1,29 @@
 import React from "react";
-import {Route, Switch, Link} from 'react-router-dom';
+import {Link } from 'react-router-dom';
 import './Navigation.css';
-import AccountButton from '../AccountButton/AccountButton'
-import menu from '../../images/menu.svg';
-import closeButton  from '../../images/menu_closeButton.svg';
+import AccountButton from '../AccountButton/AccountButton';
 
-function Navigation({loggedIn, userData, signOut}) {
-
-    const [isOpen, setIsOpen]=React.useState(false);
-
-    function handleOpenMenu() {
-        setIsOpen(true);
-    }
-
-    function handleCloseButton() {
-        setIsOpen(false);
-    }
-
+function Navigation({ loggedIn }) {
     return (
-        <Switch>
-
-            <Route path="/">
-                <div className="navigation__buttons">
+        <>
+            {!loggedIn && (
+                <nav className="navigation">
                     <Link to="/sign-up" className="navigation__button"> Регистрация</Link>
                     <Link to="/sign-in" className="navigation__button navigation__button_color">Войти</Link>
-                </div>
-            </Route>
+                </nav>
+            )}
 
-            <Route path="/movies">
-                <div className="navigation__buttons navigation__buttons_movie">
-                    <Link to="/movies" className="navigation__button navigation__button_movie">Фильмы</Link>
-                    <Link to="/saved-movies" className="navigation__button header__button_movie navigation__button_movieSaved">Сохраненный фильмы</Link>
-                </div>
-                <Link to="/profile" className="navigation__button navigation__button_account"><AccountButton /></Link>
-
-            </Route>
-        </Switch>
-
+            {loggedIn && (
+                <nav className="navigation__movies">
+                    <div className='navigation__movies-buttons'>
+                        <Link className="navigation__movies-button" to="/movies" >Фильмы</Link>
+                        <Link className="navigation__movies-button navigation__button_movieSaved" to="/saved-movies" >Сохраненные фильмы</Link>
+                    </div>
+                    <Link to="/profile" className="navigation__button navigation__button_account"><AccountButton /></Link>
+                </nav>
+            )}
+        </>
     )
-
 }
 
 export default Navigation;

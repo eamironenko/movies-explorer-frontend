@@ -35,16 +35,16 @@ const App = () => {
                         <Main />
                     </Route>
                     <Route path="/movies">
-                        <Movies />
+                        <Movies loggedIn={true}/>
                     </Route>
                     <Route path="/saved-movies">
-                        <SavedMovies />
+                        <SavedMovies loggedIn={true}/>
                     </Route>
                     <Route path="/profile">
-                        <Profile />
+                        <Profile loggedIn={true}/>
                     </Route>
                     <Route path="*">
-                        <PageNotFound />
+                        <PageNotFound loggedIn={true}/>
                     </Route>
                 </Switch>
                 <Footer />

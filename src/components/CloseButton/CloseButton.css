@@ -1,0 +1,16 @@
+.closeButton {
+    width: 22px;
+    height: 22px;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    object-fit: cover;
+    border: none;
+    transition: opacity .4s ease-in-out;
+    z-index: 200;
+  }
+  
+  .closeButton:hover {
+    opacity: .6;
+    cursor: pointer;
+  }
