@@ -1,7 +1,7 @@
 import React from 'react';
 import {useState,useEffect} from 'react-router-dom';
 import { Route, Switch} from 'react-router-dom';
-import './MoviesCardList';
+import './MoviesCardList.css';
 import MoviesCard from '../MoviesCard/MoviesCard';
 
 function MoviesCardList({cards, saveButton}) {
@@ -26,18 +26,14 @@ function MoviesCardList({cards, saveButton}) {
     }
 
     return (
-        <section className="moviesCardList">
-            <ul className="moviesCardList__container">
-                {newCards.map((item) => (
-                    <MoviesCard card={item} logoButton={saveButton}/>
-                ))}
-            </ul>
-            <Switch>
-                <Route path="/movies">
-                <button className="moviesCardList__button" type="button" aria-label="Добавить фильмы" onClick={handleAddMovie}>Еще</button>
-                </Route>
-            </Switch>
-        </section>
+            <section className="moviesCardList">
+                <ul className="moviesCardList__container">
+                    {newCards.map((item) => (
+                        <MoviesCard card={item} {...item} logoButton={saveButton} />
+                    ))}
+                </ul>
+                <button className="moviesCardList__button" type="button">Еще</button>
+            </section> 
     )
 }
 

@@ -17,7 +17,7 @@ function Navigation({ loggedIn }) {
                 <nav className="navigation__movies">
                     <div className='navigation__movies-buttons'>
                         <Link className="navigation__movies-button" to="/movies" >Фильмы</Link>
-                        <Link className="navigation__movies-button navigation__button_movieSaved" to="/saved-movies" >Сохраненные фильмы</Link>
+                        <Link className="navigation__movies-button navigation__button_movieSaved" to="/saved-movies" >Сохраненные&nbsp;фильмы</Link>
                     </div>
                     <Link to="/profile" className="navigation__button navigation__button_account"><AccountButton /></Link>
                 </nav>

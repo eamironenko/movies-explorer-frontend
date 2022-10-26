@@ -9,15 +9,15 @@ function AboutMe() {
                 <image className="aboutMe__photo"/>
                     <div className="aboutMe__info-container">
                         <div className="aboutMe__info">
-                            <h2 className="aboutMe__info_type_name">Екатерина</h2>
-                            <h3 className="aboutMe__info_type_line">Фронтенд-разработчик</h3>
-                            <p className="aboutMe__info_type_description">Я живу в Москве, закончила геологический факультет ПГУ.
+                            <h2 className="aboutMe__info_name">Екатерина</h2>
+                            <h3 className="aboutMe__info_line">Фронтенд-разработчик</h3>
+                            <p className="aboutMe__info_description">Я живу в Москве, закончила геологический факультет ПГУ.
                                 У меня есть муж и сын. Я лублю слушать музыку, смотреть фильмы и читать интересные книги. После того, как
                                 пройду курс по веб-разработке, займусь фриланс-заказами или найду постоянную работу. </p>
                         </div>
-                        <nav className="aboutMe__info_type_links">
-                            <a className="aboutMe__info_type_link" href="">Facebook</a>
-                            <a className="aboutMe__info_type_link" href="https://github.com/eamironenko">Github</a>
+                        <nav className="aboutMe__infoLinks">
+                            <a className="aboutMe__infoLink" href="">Facebook</a>
+                            <a className="aboutMe__infoLink" href="https://github.com/eamironenko">Github</a>
                         </nav>
                     </div>
             </div>

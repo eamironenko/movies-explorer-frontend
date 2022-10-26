@@ -27,7 +27,7 @@ function SearchForm() {
                         placeholder="Фильм"
                         onChange={e => setSearchText(e.target.value)}
                         required />
-                    <span className={`${searchError ? 'searchForm__error' : 'searchForm__error_visible'}`}>Нужно ввести ключевое слово</span>
+                    {/*<span className={`${searchError ? 'searchForm__error' : 'searchForm__error_visible'}`}>Нужно ввести ключевое слово</span>*/}
                     <button className="searchForm__button" type="submit">
                         <img className="searchForm__logo" alt="Логотип поиска" src={logoFind} />
                     </button>

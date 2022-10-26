@@ -1,4 +1,5 @@
 import React from 'react';
+import Header from '../Header/Header';
 import './Profile.css';
 import useForm from '../../utils/useForm';
 import validate from '../../utils/validation'
@@ -6,7 +7,7 @@ import validate from '../../utils/validation'
 const name = "Виталий";
 const email = "pochta@yandex.ru";
 
-function Profile() {
+function Profile({loggedIn}) {
     const {
         values,
         handleChange,
@@ -26,6 +27,8 @@ function Profile() {
     }
 
     return (
+        <main className="root">
+        <Header loggedIn={loggedIn}/>
         <section className="profile">
             <form className="profile__form" onSubmit={handleSubmit} noValidate>
                 <h3 className="profile__title">{`Привет, ${name}!`}</h3>
@@ -42,7 +45,7 @@ function Profile() {
                 </div>
                 <span className={`${errors.name ? 'profile__text profile__text_error' : 'profile__text_visible'}`}>{errors.name}</span>
                 <div className="profile__content">
-                    <label className="profile__text" htmlFor='userEmail'>E-mail</label>
+                    <label className="profile__text" htmlFor='userEmail'>Email</label>
                     <input className="profile__inputs profile__inputs_email"
                         id="userEmail"
                         name="email"
@@ -57,6 +60,7 @@ function Profile() {
                 <button className={`${isDisabled ? 'profile__submit-button profile__submit-button_exit' : 'profile__submit-button_hidden'}`} type="button" area-lebel="Выйти из аккаунта">Выйти из аккаунта</button>
             </form>
         </section>
+        </main>
     )
 }
 

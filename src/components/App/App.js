@@ -23,7 +23,6 @@ const App = () => {
     return (
         <div className="root">
             <CurrentUserContext.Provider value={currentUser}>
-                <Header />
                 <Switch>
                     <Route path="/sign-up">
                         <Register />

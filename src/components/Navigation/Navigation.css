@@ -9,16 +9,14 @@
 
 .navigation__movies {
     display: flex;
+    width: 100%;
     justify-content: space-between;
     align-items: center;
-    column-gap: 746px;
-    margin-left: auto;
-
+    margin-left: 0;
 }
 
 .navigation__button {
     padding: 8px 20px;
-    margin: 0 0 0 10px;
     font-family: 'Inter';
     font-style: normal;
     font-weight: 500;
@@ -36,10 +34,9 @@
 
 .navigation__button_color {
     width: 76px;
-    height: 32px;
     text-align: center;
     margin: 0;
-    padding: 0;
+    padding: 8px 0;
     background-color: #2BE080;
     border-radius: 3px;
     border: none;
@@ -49,12 +46,12 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    column-gap: 16px;
 }
 .navigation__movies-button {
     display: flex;
     justify-content: center;
     align-items: center;
+    text-decoration: none;
     font-style: normal;
     font-weight: 500;
     font-size: 13px;

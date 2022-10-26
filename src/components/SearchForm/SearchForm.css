@@ -32,6 +32,7 @@
     background-color: #F9F9F9;
     background-repeat: no-repeat;
     border: none;
+    width: 85%;
 }
 
 .searchForm__input::placeholder {
@@ -64,6 +65,7 @@
 
 .searchForm__checkbox-container {
     width: 20%;
+    min-width: 200px;
     display: flex;
     align-items: center;
 }
@@ -143,7 +145,7 @@ input[type="checkbox"].searchForm__checkbox:checked:after {
     .searchForm__container {
         flex-direction: column;
         align-items: center;
-        background-color: none;
+        background-color: #FFFFFF;
         border-radius: none;
     }
 
@@ -179,6 +181,7 @@ input[type="checkbox"].searchForm__checkbox:checked:after {
         display: flex;
         justify-content: center;
         margin: 45px auto 0;
+        background-color: none;
     }
 
     .searchForm_checkbox-text {

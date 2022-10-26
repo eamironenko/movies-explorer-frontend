@@ -10,12 +10,13 @@
     display: none;
 }
 
-@media screen and (max-width: 1279px) {
+@media screen and (max-width: 900px) {
     .nav__mobile-burger-btn {
         display: flex;
+        align-items: center;
         margin-left: auto;
         padding: 0;
-        background: #202020;
+        background: #FFFFFF;
         border: none;
         position: relative;
         transition: opacity .4s ease-in-out;
@@ -40,7 +41,7 @@
         right: 0;
         width: 67.7%;
         height: 100%;
-        background-color: #202020;
+        background-color: #FFFFFF;
         display: flex;
         flex-direction: column;
         justify-content: start;
@@ -64,13 +65,13 @@
         font-weight: 500;
         font-size: 18px;
         line-height: 22px;
-        color: #FFFFFF;
+        color: #000000;
         text-decoration: none;
         transition: opacity .4s ease-in-out;
     }
 
     .nav__mobile-link_active {
-        border-bottom: 2px solid #FFFFFF;
+        border-bottom: 2px solid #000000;
     }
 
     .nav__mobile-link:hover {

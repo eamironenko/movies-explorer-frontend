@@ -1,6 +1,8 @@
 import './Movies.css';
+import Header from '../Header/Header';
 import SearchForm from '../SearchForm/SearchForm';
 import MoviesCardList from '../MoviesCardList/MoviesCardList';
+import Preloader from '../Preloader/Preloader';
 import card1 from '../../images/card1.svg';
 import card2 from '../../images/card2.svg';
 import card3 from '../../images/card3.svg';
@@ -13,16 +15,27 @@ import card9 from '../../images/card9.svg';
 import card10 from '../../images/card10.svg';
 import card11 from '../../images/card11.svg';
 import card12 from '../../images/card12.svg';
-import saveButton from '../../images/movie_save.svg'
+import React from 'react';
 const cards = [];
-cards.push(card1, card2, card3, card4, card5, card6, card7, card8, card9, card10, card11, card12);
+cards.push(card1,card2,card3,card4,card5,card6,card7,card8,card9,card10,card11,card12);
 
-function Movies() {
+function Movies(loggedIn) {
+    const [isLoadding, setIsLoading]=React.useState(false);
+
     return (
-        <div className='movies'>
+        <main className='root'>
+            <Header loggedIn={loggedIn}/>
+            <div className='movies'>            
             <SearchForm />
-            <MoviesCardList cards={cards} logoButton={saveButton} />
+            {isLoadding ? (
+                <Preloader />
+            ) : (
+                <MoviesCardList cards={cards}/>
+            )}
+            
         </div>
+        </main>
+        
     )
 }
 
