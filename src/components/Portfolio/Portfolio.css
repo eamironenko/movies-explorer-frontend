@@ -1,25 +1,9 @@
-.portfolio {
-    display: flex;
-    flex-direction: column;
-    margin: 0;
-}
-
-.portfolio__title {
-    margin: 0 0 30px;
-    padding: 0;
-    text-align: left;
-    color: #A0A0A0;
-    font-family: 'Inter';
-    font-weight: 400;
-    font-size: 18px;
-    line-height: 1.1;
-}
-
 .portfolio__links {
     display: flex;
     justify-content: space-between;
     align-items: center;
     border-bottom: 1px solid #E6E6E6;
+    list-style-type: none;
 }
 
 .portfolio__links_content {
@@ -35,7 +19,7 @@
     padding: 0;
     color: #000000;
     text-decoration: none;
-    
+
 }
 
 .portfolio__links_nav {
@@ -59,12 +43,6 @@
 }
 
 @media screen and (max-width: 600px) {
-    .portfolio__title {
-        font-size: 14px;
-        line-height: 1.4;
-        margin: 0 0 20px;
-    }
-
     .portfolio__links_content {
         font-size: 18px;
         line-height: 1.55;

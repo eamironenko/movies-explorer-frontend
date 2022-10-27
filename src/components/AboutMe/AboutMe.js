@@ -1,6 +1,8 @@
 import './AboutMe.css';
 import aboutMeFoto from '../../images/pic_photo.svg';
 import Portfolio from '../Portfolio/Portfolio';
+import { portfolioList } from '../../utils/userData';
+
 function AboutMe() {
     return (
         <section className="aboutMe">
@@ -21,7 +23,14 @@ function AboutMe() {
                         </nav>
                     </div>
             </div>
-            <Portfolio />
+            <div className="portfolio">
+                <h3 className="portfolio__title">Портфолио</h3>
+                <ul className='portfolio__list'>
+                    {portfolioList.map((item) => (
+                        <Portfolio key={item.id} title={item.title} url={item.url}/>
+                    ))}
+                </ul>            
+            </div>
         </section>
     )
 }
