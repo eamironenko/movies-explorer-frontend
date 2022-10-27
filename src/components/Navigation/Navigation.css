@@ -53,6 +53,7 @@
     align-items: center;
     text-decoration: none;
     font-style: normal;
+    color: #000000;
     font-weight: 500;
     font-size: 13px;
     line-height: 1.4;
@@ -92,6 +93,5 @@
     }
     .navigation__button_color {
         width: 54px;
-        height: 26px;
     }
 }

@@ -21,7 +21,7 @@ const Register = ({ onRegister}) => {
     
     return (
       <section className="register">
-        <form className="register__form" onSubmit={handleSubmit} noValidate>
+        <form className="register__form" onSubmit={handleSubmit}>
           <img className="register__logo" src={registerLogo} alt="Лого на странице регистрации"/>
           <h2 className="register__title">Добро пожаловать!</h2>
           <label className="register__text" htmlFor='userName'>Имя</label>
@@ -29,6 +29,7 @@ const Register = ({ onRegister}) => {
             id="userName"
             name="name"
             type="text"
+            autoComplete='off'
             value={values.name || ''}
             onChange={handleChange}
             required />
@@ -38,6 +39,7 @@ const Register = ({ onRegister}) => {
             id="userEmail"
             name="email"
             type="email"
+            autoComplete='off'
             value={values.email || ''}
             onChange={handleChange}
             required />
@@ -47,6 +49,7 @@ const Register = ({ onRegister}) => {
             id="userPassword"
             name="password"
             type="password"
+            autoComplete='off'
             value={values.password || ''}
             onChange={handleChange}
             required />

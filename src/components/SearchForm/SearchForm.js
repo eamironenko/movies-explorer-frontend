@@ -18,7 +18,7 @@ function SearchForm() {
 
     return (
         <div className="searchForm">
-            <form className="searchForm__container" onSubmit={handleSubmitFind} noValidate>
+            <form className="searchForm__container" onSubmit={handleSubmitFind}>
                 <div className="searchForm__film-container">
                     <input className="searchForm__input"
                         id="findFilm"

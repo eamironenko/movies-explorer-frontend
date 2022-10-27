@@ -12,7 +12,23 @@
     text-rendering: optimizeLegibility;
 }
 
-@media (max-width: 1024px) {
+.page {
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+}
+
+.main {
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/*@media (max-width: 1024px) {
     .page {
         max-width: 1024px;
     }
@@ -28,5 +44,5 @@
     .page {
         max-width: 320px;
     }
-}
+}*/
 

@@ -17,7 +17,7 @@
 .moviesCardList__data {
     box-sizing: border-box;
     margin: 0;
-    width: 100%;
+    width: 85%;
 }
 
 .moviesCardList__title {
@@ -42,12 +42,16 @@
 }
 
 .moviesCardList__save {
+    box-sizing: border-box;
     width: 30px;
     height: 30px;
     padding: 0;
-    background-image: url(../../images/movie_save.svg);
+    margin: 0;
     border: none;
-    background-color: #FFFFFF;
+    background: none;
+    /*background-image: url(../../images/movie_save.svg);*/
+}
+.moviesCardList__savePic {
     cursor: pointer;
     transition: opacity 0.5s ease-in-out;
 }

@@ -20,7 +20,7 @@ const Login = ({ onLogin, errorLogin, error }) => {
 
     return (
         <section className="login">
-            <form className="login__form" onSubmit={handleSubmit} noValidate>
+            <form className="login__form" onSubmit={handleSubmit}>
                 <img className="login__logo" src={loginLogo} alt="Лого на странице регистрации" />
                 <h2 className="login__title">Рады видеть!</h2>
                 <label className="login__text" htmlFor="userEmail">E-mail</label>
@@ -28,6 +28,7 @@ const Login = ({ onLogin, errorLogin, error }) => {
                     id="userEmail"
                     name="email"
                     type="email"
+                    autoComplete="off"
                     value={values.email || ''}
                     onChange={handleChange}
                     required />
@@ -37,6 +38,7 @@ const Login = ({ onLogin, errorLogin, error }) => {
                     id="userPassword"
                     name="password"
                     type="password"
+                    autoComplete="off"
                     value={values.password || ''}
                     onChange={handleChange}
                     required />

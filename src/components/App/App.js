@@ -21,7 +21,6 @@ const App = () => {
     const [loggedIn, setLoggedIn] = React.useState(false);
 
     return (
-        <div className="root">
             <CurrentUserContext.Provider value={currentUser}>
                 <Switch>
                     <Route path="/sign-up">
@@ -46,9 +45,7 @@ const App = () => {
                         <PageNotFound loggedIn={true}/>
                     </Route>
                 </Switch>
-                <Footer />
             </CurrentUserContext.Provider>
-        </div>
     )
 }
 
