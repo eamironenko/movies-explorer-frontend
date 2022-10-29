@@ -10,7 +10,7 @@ import './Main.css';
 function Main() {
     return (
         <div className="page">
-            <Header loggedIn={false} />
+            <Header loggedIn={false}/>
             <main className="main">
                 <Promo />
                 <AboutProject />
