@@ -30,7 +30,20 @@ const App = () => {
     const [errorMessage, setErrorMessage] = React.useState('');
     const [errorReg, setErrorReg] = React.useState(false);
     const history = React.useHistory();
-    const [state, setState] = React.useState(localStorage.getItem('jwt') || false)
+    const [state, setState] = React.useState(localStorage.getItem('jwt') || false);
+
+    const [movies, setMovies] = React.useState([]);
+    const [moviesMain, setMoviesMain] = React.useState([]); 
+    const [showMovies, setShowMovies] = React.useState([]);
+    const [findMovies, setFindMovies] = React.useState([]);
+    const [findMoviesMain, setFindMoviesMain] = React.useState([]);
+    const [countMovies, setCountMovies] = React.useState('');
+    const [disabledBtn, setDisabledBtn] = React.useState(false);
+
+
+    let regPassword='';
+    let localChecked = false;
+    const [checked, setChecked] = React.useState(localChecked);
 
     React.useEffect(() => {
         const jwt = localStorage.getItem('jwt');
@@ -38,6 +51,62 @@ const App = () => {
             setStatusToken(jwt);
         }
     }, [loggedIn]);
+
+    React.useEffect(() => {
+        setFindMovies(moviesMain);
+    }, [moviesMain]);
+
+    React.useEffect(() => {   // количество фильмов на странице
+        if (findMovies.length === showMovies.length || 
+            findMovies.length < showMovies.length) {
+                setDisabledBtn(true);
+            } else {
+                setDisabledBtn(false);
+            }
+    }, [showMovies.length, findMovies.length]);
+
+    React.useEffect(() => {
+        if (loggedIn) {
+            setIsLoading(true);
+            setErrorMessage('');
+            mainApi.getSavedMovies()
+            .then((res) => {
+                setMoviesMain(res.filter(i => i.owner.toString() === currentUser._id));
+                const localMovies = JSON.parse(localStorage.getItem('movies'));
+                getMovies();
+                if (localMovies) {
+                    setShowMovies(limitMovies(localMovies));
+                    setFindMovies(localMovies);
+                } else {
+                    setShowMovies([]);
+                    setFindMovies([]);
+                }
+            })
+            .catch((err) => {console.log(err)})
+            .finally(() => setIsLoading(false));
+        }
+    })
+
+    const getMovies = (searchText, checked) => {
+        setIsLoading(true);
+        moviesApi.getMovie()
+        .then((res) => {
+            setErrorMessage('');
+            res.forEach(element => {
+                element.image.url = 
+                element.image.formats.thumbnail.url = 
+            });
+        return res
+        })
+        .then ((res) => {
+            setMovies
+        })
+        .catch((err) => {
+            setErrorMessage();
+            console.log(err);
+          })
+        .finally(() => {setIsLoading(false)})
+    }
 
     const setStatusToken = (jwt) => {
         setErrorMessage('');
@@ -142,9 +211,15 @@ const App = () => {
                     <Route path="/saved-movies">
                         <SavedMovies loggedIn={true}/>
                     </Route>
-                    <Route path="/profile">
-                        <Profile loggedIn={true}/>
-                    </Route>
+                    <ProtectedRoute 
+                         path="/profile"
+                         state={state}
+                         loggedIn={loggedIn}
+                         onUpdateUser={handleUpdateUser}
+                         onSignOut={onSignOut}
+                         errorMessage={errorMessage}
+                         setErrorMessage={setErrorMessage}
+                         component ={Profile}/>
                     <Route path="*">
                         <PageNotFound loggedIn={true}/>
                     </Route>
