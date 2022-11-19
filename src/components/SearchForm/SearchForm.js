@@ -1,34 +1,52 @@
 import React from 'react';
+import {useForm} from 'react-hook-form';
 import './SearchForm.css';
 import logoFind from '../../images/find_logo.svg';
 import line from '../../images/input__strokeLine.svg'
 
-function SearchForm() {
-    const [searchText, setSearchText] = React.useState('');
-    const [searchError, setSearchError] = React.useState('');
+function SearchForm({
+    isLoading, 
+    onSwitchCheckbox, 
+    onFindMovies, 
+    checked, 
+    isSaved}) {
+    
+    let searchTextLocal = ''
+    if (isSaved) {localStorage.getItem('textSave') ? searchTextLocal=localStorage.getItem('textSave') : searchTextLocal='';
+    } else {
+        localStorage.getItem('text') ? searchTextLocal = localStorage.getItem('text') : searchTextLocal='';
+    } 
 
-    function handleSubmitFind(e) {
-        e.preventDefault();
-        if (searchText.length === 0) {
-            setSearchError(true);
-        } else {
-            setSearchError(false);
-        }
+    const {
+        register,
+        handleSubmit,
+        formState: {errors},
+    } = useForm ({
+        mode: "onSubmit",
+        defaultValues: {searchText: searchTextLocal}
+    });
+
+    const onSubmit=(data) =>{
+        onFindMovies(data.searchText, checked)
+    }
+    function ChangeCheckbox() {
+        onSwitchCheckbox(searchTextLocal);
     }
 
     return (
         <div className="searchForm">
-            <form className="searchForm__container" onSubmit={handleSubmitFind}>
+            <form className="searchForm__container" onSubmit={handleSubmit(onSubmit)}>
                 <div className="searchForm__film-container">
                     <input className="searchForm__input"
-                        id="findFilm"
-                        name="findFilm"
                         type="text"
-                        placeholder="Фильм"
-                        onChange={e => setSearchText(e.target.value)}
-                        required />
-                    {/*<span className={`${searchError ? 'searchForm__error' : 'searchForm__error_visible'}`}>Нужно ввести ключевое слово</span>*/}
-                    <button className="searchForm__button" type="submit">
+                        placeholder='Фильм'
+                        disabled={isLoading}
+                        {...register('searchText', {
+                            required: "Нужно ввести ключевое слово"
+                        })}
+                    />
+                    {errors?.searchText && <span className='searchForm__error'>{errors.searchText.message}</span>}
+                    <button className="searchForm__button" type="submit" disabled={isLoading}>
                         <img className="searchForm__logo" alt="Логотип поиска" src={logoFind} />
                     </button>
                 </div>
@@ -37,7 +55,9 @@ function SearchForm() {
                     <input className="searchForm__checkbox"
                         type="checkbox"
                         id="searchForm_checkbox"
-                        name="checkbox" />
+                        name="checkbox" 
+                        checked={checked}
+                        onChange={ChangeCheckbox}/>
                     <p className="searchForm_checkbox-text">Короткометнажки</p>
                 </div>
             </form>

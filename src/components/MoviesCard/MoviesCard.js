@@ -1,20 +1,50 @@
 import React from 'react';
 import './MoviesCard.css';
-import likeButton from '../../images/movie_save.svg'
+import { BASE_URL_image } from '../../utils/constants';
 
-function MoviesCard({ ...card }) {
+function MoviesCard({ 
+  movie, 
+  onSaveMovies, 
+  isLoading, 
+  isSaved, 
+  onDeleteMovie, 
+  icon, 
+  isSavePage}) {
+
+  const handleAddMovie = () => {
+    onSaveMovies(movie);
+  }
+  const handleDeleteMovie = () => {
+      onDeleteMovie(movie)
+  }
+  //console.log(movie)
+  //console.log(isSavePage)
+  //console.log(isSaved)
+  
   return (
     <li className="moviesCardList__element">
       <div className="moviesCardList__caption">
         <div className="moviesCardList__data">
-          <p className="moviesCardList__title">{card.nameRU}</p>
-          <p className="moviesCardList__duration">{card.duration}</p>
+          <p className="moviesCardList__title">{movie.nameRU}</p>
+          <p className="moviesCardList__duration">{`${movie.duration} минут`}</p>
         </div>
-        <button className="moviesCardList__save" type="button" >
-          <img className="moviesCardList__savePic" src={likeButton} alt="фильм сохранен" />
+        <button className="moviesCardList__save"
+          type="button"
+          onClick={isSavePage  ? handleDeleteMovie : handleAddMovie}
+          disabled={isLoading}>
+          <img className='moviesCardList__savePic'
+            src={icon}
+            alt={isSaved ? "Кнопка удаления фильма": "Кнопка сохранения фильма"} />
         </button>
       </div>
-      <img className="moviesCardList_card" alt="Постер" src={card.thumbnail} />
+      <a className='movieCardList__link'
+        target="_blank"
+        rel="noreferrer"
+        href={movie.trailerLink}>
+        <img className="moviesCardList__card"
+          alt="Постер к фильму"
+          src={!isSavePage ? `${BASE_URL_image}${movie.image.url}` : `${movie.image}`} />
+      </a>
     </li>
   )
 }

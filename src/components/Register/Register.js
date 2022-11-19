@@ -32,9 +32,6 @@ const Register = ({ onRegister, errorReg, errorMessage, setErrorMessage, isLoadi
           <h2 className="register__title">Добро пожаловать!</h2>
           <label className="register__text" htmlFor='userName'>Имя</label>
           <input className="register__inputs"
-            id="userName"
-            name="name"
-            type="text"
             {...register("name", {
               required: "Имя должно быть заполнено",
               minLength: {
@@ -48,14 +45,13 @@ const Register = ({ onRegister, errorReg, errorMessage, setErrorMessage, isLoadi
                 message: "Имя введено некорректно"
               }
             })}
+            type="text"
             disabled={isLoading}
             />
           {errors?.name && <span className={`${errors.name ? 'register__text register__text_error' : 'register__text_visible'}`}>{errors.name.message}</span>}
           <label className="register__text" htmlFor='userEmail'>E-mail</label>
           <input className="register__inputs register__inputs_email"
-            id="userEmail"
-            name="email"
-            type="email"
+            
             {...register("email", {
               required: "Почта должна быть заполнена",
               pattern: {
@@ -63,14 +59,12 @@ const Register = ({ onRegister, errorReg, errorMessage, setErrorMessage, isLoadi
                 message: "Почта введена некорректно",
               }
             })}
-            disabled={isLoading}
+            type="email"
+            disabled={isLoading}            
             />
           {errors?.email && <span className={`${errors.email ? 'register__text register__text_error' : 'register__text_visible'}`}>{errors.email.message}</span>}
           <label className="register__text" htmlFor='userPassword'>Пароль</label>
           <input className="register__inputs register__inputs_password"
-            id="userPassword"
-            name="password"
-            type="password"
             {...register("password", {
               required: "Пароль должен быть заполнен",
               minLength: {
@@ -80,13 +74,13 @@ const Register = ({ onRegister, errorReg, errorMessage, setErrorMessage, isLoadi
                 value: 30,
                 message: "Пароль должно быть не более 30 знаков" },
             })}
+            type="password"
             disabled={isLoading}
             />
           {errors?.email && <span className="register__text register__text_error register__text_visible">{errors.password.message}</span>}
-          <span className={`${errorReg ? 'register__text register__text_error' : 'register__text_visible'}`}>Что-то пошло не так ...</span>
           <span className={`${errorReg ? 'register__text register__text_error' : 'register__text_visible'}`}>{errorMessage}</span>
-          
-          <button className={`${Object.keys(errors).length === 0 ? 'register__submit-button' : 'register__submit-button '}`} 
+          <button 
+             className={`${Object.keys(errors).length === 0 && isDirty &&  isValid ? 'register__submit-button' : 'register__submit-button register__submit-button_disabled'}`} 
              type="submit" 
              disabled={!isDirty || !isValid}>Зарегистрироваться
           </button>

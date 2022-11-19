@@ -29,6 +29,9 @@
     line-height: 1.2;
     text-align: left;
     color: #000000;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
 }
 
 .moviesCardList__duration {
@@ -56,16 +59,21 @@
     transition: opacity 0.5s ease-in-out;
 }
 
-.moviesCardList__save_active {
-    background-image: url(../../images/movie_save_active.svg);
-}
-
-.moviesCardList_card {
+.movieCardList__link {
+    text-decoration: none;
     width: 100%;
-    height: auto;
+    transition: opacity .4s ease-in-out;
+}
+.movieCardList__link:hover {
+    opacity: .6;
+    cursor: pointer;
+}
+.moviesCardList__card {
+    width: 100%;
+    height: 85%;
     padding: 0;
     margin: 0;
-    background-size: cover;
+    background-size: contain;
 }
 
 @media screen and (max-width: 600px) {

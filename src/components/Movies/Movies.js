@@ -4,28 +4,48 @@ import './Movies.css';
 import Header from '../Header/Header';
 import SearchForm from '../SearchForm/SearchForm';
 import MoviesCardList from '../MoviesCardList/MoviesCardList';
-import Preloader from '../Preloader/Preloader';
 import Footer from '../Footer/Footer';
 
-function Movies(loggedIn) {
-    const [isLoadding, setIsLoading]=React.useState(false);
+function Movies({
+  loggedIn,
+  isLoading,
+  state,
+  onFindMovies,
+  displayMovies,
+  onSaveMovies,
+  moviesBasic,
+  onSwitchCheckbox,
+  checked,
+  onAddMovie,
+  findMovies,
+  setMessage,
+  onDeleteMovie,
+  }) {
 
     return (
         <div className='page'>
-            <Header loggedIn={loggedIn} />
+            <Header loggedIn={loggedIn} setMessage={setMessage} />
             <main className='main'>
                 <div className='movies'>
-                    <SearchForm />
-                    {isLoadding ? (
-                        <Preloader />
-                    ) : (
-                        <MoviesCardList />
-                    )}
+                    <SearchForm
+                        isLoading={isLoading}
+                        onFindMovies={onFindMovies}
+                        onSwitchCheckbox={onSwitchCheckbox}
+                        checked={checked}
+                    />
+                    <MoviesCardList
+                        isLoading={isLoading}
+                        moviesBasic={moviesBasic}
+                        displayMovies={displayMovies}
+                        onSaveMovies={onSaveMovies}
+                        onAddMovie={onAddMovie}
+                        findMovies={findMovies}
+                        onDeleteMovie={onDeleteMovie}
+                    />
                 </div>
             </main>
             <Footer />
         </div>
-
     )
 }
 

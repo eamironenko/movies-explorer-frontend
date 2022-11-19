@@ -1,4 +1,7 @@
+import { BASE_URL_image } from '../utils/constants';
 export const BASE_URL = 'http://localhost:3000';
+//export const BASE_URL_image = 'https://api.nomoreparties.co';
+
 
 function handleResponse(res) {
     if (res.ok) {
@@ -17,12 +20,11 @@ function setToken(res) {
 
 export const register = (name, email, password) => {
     return fetch(`${BASE_URL}/signup`, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            Accept: "application/json"
-        },
-        body: JSON.stringify({ name, password, email })
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({name, password, email})
     })
         .then(handleResponse)
 };
@@ -41,7 +43,6 @@ export const authorize = (email, password) => {
 
 export const checkToken = (token) => {
     return fetch(`${BASE_URL}/users/me`, {
-        credentials: 'include',
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',
@@ -62,7 +63,7 @@ export const getUserData = () => {
         .then(handleResponse)
 };
 
-export const editUserData = (formData) => {
+export const editUserData = (data) => {
     return fetch(`${BASE_URL}/users/me`, {
         method: 'PATCH',
         headers: {
@@ -70,8 +71,8 @@ export const editUserData = (formData) => {
             authorization: `Bearer ${localStorage.getItem('jwt')}`,
         },
         body: JSON.stringify({
-            name: formData.name,
-            email: formData.email,
+            name: data.name,
+            email: data.email,
         }),
     })
         .then(handleResponse)
@@ -87,7 +88,7 @@ export const getSavedMovies = () => {
         .then(handleResponse)
 }
 
-export const saveMovie = (dataMovie) => {
+export const saveMovie = (data) => {
     return fetch(`${BASE_URL}/movies`, {
         method: 'POST',
         headers: {
@@ -95,24 +96,24 @@ export const saveMovie = (dataMovie) => {
             "Content-Type": "application/json",
         },
         body: JSON.stringify ({
-            nameRU: dataMovie.nameRU,
-            country: dataMovie.country,
-            director: dataMovie.director,
-            duration: dataMovie.duration,
-            year: dataMovie.year,
-            description: dataMovie.description,
-            image: dataMovie.image.url,
-            trailerLink: dataMovie.trailerLink,
-            thumbnail: dataMovie.image.formats.thumbnail.url,
-            movieId: dataMovie.id,
-            nameEN: dataMovie.nameEN
+            nameRU: data.nameRU || '',
+            country: data.country || '',
+            director: data.director || '',
+            duration: data.duration || '',
+            year: data.year || '',
+            description: data.description || '',
+            image: `${BASE_URL_image}${data.image.url}` || '',
+            trailerLink: data.trailerLink || '',
+            thumbnail: `${BASE_URL_image}${data.image.formats.thumbnail.url}` || '',
+            movieId: data.id,
+            nameEN: data.nameEN
         })
     })
-    .then(handleResponse)
+    .then(handleResponse);
 };
 
-export const deleteMovie = (dataMovie) => {
-    return fetch(`${BASE_URL}/movies/${dataMovie._id}`, {
+export const deleteMovie = (data) => {
+    return fetch(`${BASE_URL}/movies/${data._id}`, {
         method: 'DELETE',
         headers: {
             Authorization: `Bearer ${localStorage.getItem('jwt')}`,

@@ -19,8 +19,8 @@ const Login = ({ onLogin, errorMessage, setErrorMessage, isLoading }) => {
         console.log(data);
     }
 
-    const clearErrorRegister = () => {
-        setErrorMessage('')
+    const clearErrorLogin = () => {
+        setErrorMessage('');
       }
    
     return (
@@ -29,10 +29,7 @@ const Login = ({ onLogin, errorMessage, setErrorMessage, isLoading }) => {
                 <img className="login__logo" src={loginLogo} alt="Лого на странице регистрации" />
                 <h2 className="login__title">Рады видеть!</h2>
                 <label className="login__text" htmlFor="userEmail">E-mail</label>
-                <input className="login__inputs login__inputs_email"
-                    id="userEmail"
-                    name="email"
-                    type="email"
+                <input className="login__inputs login__inputs_email"                    
                     {...register("email", {
                         required: "Почта должна быть заполнена",
                         pattern: {
@@ -40,14 +37,12 @@ const Login = ({ onLogin, errorMessage, setErrorMessage, isLoading }) => {
                           message: "Почта введена некорректно",
                         }
                       })}
+                      type="email"
                       disabled={isLoading}
-                    />
+                />
                 {errors?.email && <span className="login__text login__text_error">{errors.email.message}</span>}
                 <label className="login__text" htmlFor="userPassword">Пароль</label>
                 <input className="login__inputs login__inputs_password"
-                    id="userPassword"
-                    name="password"
-                    type="password"
                     {...register("password", {
                         required: "Пароль должен быть заполнен",
                         minLength: {
@@ -57,16 +52,18 @@ const Login = ({ onLogin, errorMessage, setErrorMessage, isLoading }) => {
                           value: 30,
                           message: "Пароль должно быть не более 30 знаков" },
                       })}
+                      type="password"
                       disabled={isLoading}
-                      />
-                {errors?.password && <span className="login__text login__text_error">{errors.email.message}</span>}
+                />
+                {errors?.password && <span className="login__text login__text_error">{errors.password.message}</span>}
                 <span className={`${errorMessage ? 'login__text login__text_error' : 'login__text_visible'}`}>{errorMessage}</span>
-                <button className={`${Object.keys(errors).length === 0 ? 'login__submit-button' : 'login__submit-button login__submit-button_disabled'}`} 
-                  type="submit" 
-                  disabled={!isDirty || !isValid}>Войти
+                <button 
+                  className={`${Object.keys(errors).length === 0 && isDirty && isValid ? 'login__submit-button' : 'login__submit-button login__submit-button_disabled'}`} 
+                  disabled={!isDirty || !isValid}
+                  type="submit">Войти
                 </button>
                 <p className="login__text login__text_result">Eще не зарегистрированы?&nbsp;
-                    <Link to='/sign-up' className="login__text login__text_link" onClick={{clearErrorRegister}}>Регистрация</Link>
+                    <Link to='/sign-up' className="login__text login__text_link" onClick={clearErrorLogin}>Регистрация</Link>
                 </p>
             </form>
         </section>

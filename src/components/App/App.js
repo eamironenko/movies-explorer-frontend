@@ -1,8 +1,8 @@
 import React, { useState, useEffect} from 'react';
-import { Route, Switch, useHistory } from 'react-router-dom';
+import { Redirect, Route, Switch, useHistory, useLocation } from 'react-router-dom';
 import { CurrentUserContext } from '../../contexts/CurrentUserContext';
-
-// страницы
+import ProtectedRoute from '../ProtectedRoute/ProtectedRoute';
+//-----Блоки
 import Main from '../Main/Main';
 import Movies from '../Movies/Movies';
 import SavedMovies from '../SavedMovies/SavedMovies';
@@ -11,105 +11,212 @@ import Register from '../Register/Register';
 import Login from '../Login/Login';
 import Preloader from '../Preloader/Preloader';
 import PageNotFound from '../PageNotFound/PageNotFound';
-
-// допники
+//-----Допники
 import './App.css';
 import * as moviesApi from '../../utils/MoviesApi';
 import * as mainApi from '../../utils/MainApi';
-
-//windowWidth 
-//constants
-//protectedRoad
-
-// константы
+import * as constants from '../../utils/constants';
+import * as screenSize from '../../utils/screenSize';
+import { desktop, tablet, mobile } from '../../utils/constants';
+import { 
+    SERVER_ERR,
+    NOT_FOUND_ERR,
+    INVALID_DATA_ERR,
+    UNAUTHORIZED_ERR,
+    CONFLICT_ERR,
+    UPDATE_ERR,
+    UPDATE_SUCCESS
+} from '../../utils/errMessage';
 
 const App = () => {
-    const [currentUser, setCurrentUser] = React.useState({});
-    const [loggedIn, setLoggedIn] = React.useState(false);
-    const [isLoading, setIsLoading] = React.useState(false);
-    const [errorMessage, setErrorMessage] = React.useState('');
-    const [errorReg, setErrorReg] = React.useState(false);
-    const history = React.useHistory();
-    const [state, setState] = React.useState(localStorage.getItem('jwt') || false);
+    const [currentUser, setCurrentUser] = useState({});
+    const [loggedIn, setLoggedIn] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
+    const [errorReg, setErrorReg] = useState(false);
+    const [message, setMessage] = useState('');
+    const [state, setState] = useState(localStorage.getItem('jwt') || false);
+    const history = useHistory();
+    let screenWidth = screenSize.useCurrentWidth();
 
-    const [movies, setMovies] = React.useState([]);
-    const [moviesMain, setMoviesMain] = React.useState([]); 
-    const [showMovies, setShowMovies] = React.useState([]);
-    const [findMovies, setFindMovies] = React.useState([]);
-    const [findMoviesMain, setFindMoviesMain] = React.useState([]);
-    const [countMovies, setCountMovies] = React.useState('');
-    const [disabledBtn, setDisabledBtn] = React.useState(false);
-
-
-    let regPassword='';
+    const [allMovies, setAllMovies] = useState([]); //все фильмы с сервака
+    const [movies, setMovies] = useState([]); //фильмы на клиентской части
+    const [displayMovies, setDisplayMovies] = useState([]); //количество показанных на странице фильмов
+    const [findMovies, setFindMovies] = useState([]); //найденные по поиску
+    const [findMoviesBasic, setFindMoviesBasic] = useState([]); // отсортированные
+    const [loadMovies, setLoadMovies] = useState(''); // на старнице
+    const [loadMoreMovies, setLoadMoreMovies] = useState(''); // дополнительные 3 по кнопке еще
+  
     let localChecked = false;
+    let localCheckedSave = false;
+    
     const [checked, setChecked] = React.useState(localChecked);
-
-    React.useEffect(() => {
+    const [checkedSave, setCheckedSave] = React.useState(localCheckedSave);
+    
+    useEffect(() => {
         const jwt = localStorage.getItem('jwt');
         if (jwt) {
             setStatusToken(jwt);
         }
     }, [loggedIn]);
+    
+    //-----Формат отображения карточек
+    useEffect(() => {
+        if (screenWidth <= 768 && screenWidth > 320) {
+            setLoadMovies(tablet.amount);
+            setLoadMoreMovies(tablet.addAmount);
+        } else if (screenWidth <= 320) {
+            setLoadMovies(mobile.amount);
+            setLoadMoreMovies(mobile.addAmount);
+        } else if (screenWidth > 768) {
+            setLoadMovies(desktop.amount);
+            setLoadMoreMovies(desktop.addAmount)
+        }
+    }, [screenWidth]);
 
-    React.useEffect(() => {
-        setFindMovies(moviesMain);
-    }, [moviesMain]);
+    const listMovies = (movies) => {
+        return movies.slice(0, loadMovies);
+    }
+    const nextMovies = (movies) => {
+        return movies.slice(
+            displayMovies.length, 
+            (displayMovies.length + loadMoreMovies));
+    }
+    const onAddMovie = ()=> {
+        setDisplayMovies(displayMovies.concat(...nextMovies(findMovies)));
+    }
 
-    React.useEffect(() => {   // количество фильмов на странице
-        if (findMovies.length === showMovies.length || 
-            findMovies.length < showMovies.length) {
-                setDisabledBtn(true);
-            } else {
-                setDisabledBtn(false);
-            }
-    }, [showMovies.length, findMovies.length]);
+    useEffect(() => {
+        setFindMoviesBasic(movies);
+    }, [movies]);
 
-    React.useEffect(() => {
+    useEffect(() => {
         if (loggedIn) {
             setIsLoading(true);
-            setErrorMessage('');
             mainApi.getSavedMovies()
             .then((res) => {
-                setMoviesMain(res.filter(i => i.owner.toString() === currentUser._id));
+                setMovies(Array.from(res).filter(i => i.owner.toString() === currentUser._id));
+
+                const localAllMovies = JSON.parse(localStorage.getItem('allMovies'));
                 const localMovies = JSON.parse(localStorage.getItem('movies'));
-                getMovies();
+
                 if (localMovies) {
-                    setShowMovies(limitMovies(localMovies));
-                    setFindMovies(localMovies);
+                    setFindMoviesBasic(localMovies);
+                }
+                getAllMovies();
+                if (localAllMovies) {
+                    setDisplayMovies(listMovies(localAllMovies));
+                    setFindMovies(localAllMovies);
                 } else {
-                    setShowMovies([]);
+                    setDisplayMovies([]);
                     setFindMovies([]);
                 }
             })
-            .catch((err) => {console.log(err)})
+            .catch((err) => {
+                setMessage(SERVER_ERR);
+                console.log(err);})
             .finally(() => setIsLoading(false));
         }
-    })
+    }, [loggedIn]);
 
-    const getMovies = (searchText, checked) => {
+    //-----Работа с фильмаи
+    const getAllMovies = () => {
         setIsLoading(true);
         moviesApi.getMovie()
-        .then((res) => {
-            setErrorMessage('');
-            res.forEach(element => {
-                element.image.url = 
-                element.image.formats.thumbnail.url = 
-            });
-        return res
-        })
         .then ((res) => {
-            setMovies
+            setAllMovies(res);})
+        .catch((err) => {
+            setMessage(SERVER_ERR);
+            console.log(err)})
+        .finally(() => {setIsLoading(false)})
+    }
+    //--ищем фильмы по запросу
+    const onFindMovies = (query, checked) => {
+        const searchQuery = query.toLowerCase();
+        localStorage.getItem('checked') === "true" ? localChecked=true : localChecked=false;
+
+        const searchMovies = allMovies.filter(element =>
+            (element.nameRU.toLowerCase().includes(searchQuery)
+            || element.nameEN.toLowerCase().includes(searchQuery))
+            & (checked ? element.duration < constants.timing : element.duration>0)
+            )
+            if (searchMovies.length === 0) {
+                setMessage(NOT_FOUND_ERR)
+                setFindMoviesBasic([])
+            }
+            setFindMovies(searchMovies);
+            setDisplayMovies(listMovies(searchMovies));
+            localStorage.setItem('AllMovies', JSON.stringify(searchMovies));
+            localStorage.setItem('checked',checked);
+            localStorage.setItem('query', query);
+    }
+    const onSwitchCheckbox = (query) => {
+        setChecked(!checked);
+        onFindMovies(query, !checked);
+    }
+    
+    const onSaveMovies = (data) => { 
+        setIsLoading(true);
+        mainApi.saveMovie(data)
+        .then((res) => {
+            setMovies([...movies, res]);
         })
         .catch((err) => {
-            setErrorMessage();
-            console.log(err);
-          })
-        .finally(() => {setIsLoading(false)})
+            if (err.status === 400) {
+                setMessage(INVALID_DATA_ERR)
+            } else if (err.status === 500 ) {
+                setMessage(SERVER_ERR)}
+            console.log(err)})
+        .finally(() => {
+            setIsLoading(false)})
+    }
+
+    const onSaveFindMovies = (querySave, checkedSave) => {    // поиск в сохраненных фильмах
+        const searchQuery = querySave.toLowerCase();
+        localStorage.getItem('checkedSave') ==="true" ? localCheckedSave=true : localCheckedSave=false;
+        if (localStorage.getItem('checkedSave')) {
+            if (localStorage.getItem('checkedSave') === "true") {
+                localCheckedSave=true
+            }
+        }
+
+        const searchMovies = movies.filter(element => 
+            (element.nameRU.toLowerCase().includes(searchQuery)
+            || element.nameEN.toLowerCase().includes(searchQuery))
+            & (checkedSave ? element.duration<constants.timing : element.duration>0));
+
+            setFindMoviesBasic(searchMovies);
+            localStorage.setItem('checkedSave', checkedSave);
+            localStorage.setItem('querySave', querySave);
+            localStorage.setItem('moviesBasic', JSON.stringify(searchMovies));
+        
+            if (searchMovies.length === 0) {
+                setFindMoviesBasic([]);
+                setMessage(NOT_FOUND_ERR);
+            }
+    }
+    
+    const onSavedCheckbox = (querySave) => {
+        setCheckedSave(!checkedSave);
+        onSaveFindMovies(querySave, !checkedSave);
+    }
+
+    const onDeleteMovie =(data) => {
+        setIsLoading(true);
+        mainApi.deleteMovie(data)
+        .then(() => {
+            setMovies((state) => state.filter((i) => i.movie._id !== data._id));
+        })
+        .then(() => {
+            setFindMoviesBasic((state) => state.filter((i) => i.movie._id !== data._id));
+        })
+        .catch((err) => {
+            setMessage(SERVER_ERR);
+            console.log(err)})
+        .finally(() => {
+            setIsLoading(false)})
     }
 
     const setStatusToken = (jwt) => {
-        setErrorMessage('');
         mainApi.checkToken(jwt)
             .then((res) => {
                 if (res) {
@@ -117,114 +224,168 @@ const App = () => {
                     setCurrentUser(res);
                 } else {
                     setLoggedIn(false);
+                    localStorage.clear();
+                    setMovies([]); 
                 }
             })
             .catch((err) => {
-                setErrorMessage()
+                setMessage(SERVER_ERR);
                 console.log(err)
             })
     }
 
     const onRegister = ({ name, email, password }) => {
-        setErrorMessage('');
         setIsLoading(true);
-        regPassword = password;
         return mainApi.register(name, email, password)
           .then((res) => {
-            if (res.message) {
-              setErrorMessage(res.error);
-              history.push('/sign-up')
+            if (res) {
+              onLogin({ email: res.email, password: password });
             } else {
-              onLogin({ email: res.email, password: regPassword});
+              setMessage(CONFLICT_ERR);
+              history.push('/sign-up')
             }
           })
           .catch((err) => {
+            if ( err.status === 409) {
+                setMessage(CONFLICT_ERR)
+            } else if ( err.status === 500) {
+                setMessage(SERVER_ERR);
+            }
             setErrorReg(true);
             console.log(err);
           })
           .finally(() => { setIsLoading(false)});
-        }
-    
+    }
+
     const onLogin = ({ email, password }) => {
-        setErrorMessage('');
         setIsLoading(true);
         return mainApi.authorize(email, password)
         .then((res) => {
             if (res.token) {
               localStorage.setItem('jwt', res.token);
-              setLoggedIn(true);
-              history.push('/movies');
+              setChecked(false);
+              setCheckedSave(false);
             } else {
-                setErrorMessage(res.error);
+              setMessage(UNAUTHORIZED_ERR);
             }
         })
         .catch((err) => {
-            console.log(err) })
-        .finally(() => { setIsLoading(false)});
-    }
-    
-    const onSignOut = () => {   // выход из аккаунта
-        localStorage.removeItem('jwt');
-        localStorage.removeItem('movies');
-        localStorage.removeItem('checked');
-        localStorage.removeItem('text');
-        setLoggedIn(false)
-        history.push('/');
+            if ( err.status === 409) {
+                setMessage(CONFLICT_ERR)
+            } else if ( err.status === 500) {
+                setMessage(SERVER_ERR);
+            }
+            console.log(err) 
+        })
+        .finally(() => setIsLoading(false));
     }
 
-    const handleUpdateUser = (FormData) => {
+    const onUpdateUser = (data) => {
         setIsLoading(true);
-        mainApi.editUserData(FormData)
+        mainApi.editUserData(data)
         .then((res) => {
             setCurrentUser(res);
         })
-        .catch ((err) ={console.log(err) })
+        .catch ((err) => {
+            if (err.status === 409) {
+                setMessage(CONFLICT_ERR)
+            } else if (err.status === 500 ) {
+                setMessage(SERVER_ERR)}
+            console.log(err)})
         .finally(() => { setIsLoading(false)});
     }
 
+    const onSignOut = () => {
+        setLoggedIn(false);
+        localStorage.clear();
+        setCurrentUser({});
+        setAllMovies([]);
+        setMovies([]);
+        setLoggedIn(false)
+        history.push('/');
+    }
+    
     return (
-            <CurrentUserContext.Provider value={currentUser}>
+        <CurrentUserContext.Provider value={{user: currentUser}}>
+            {isLoading ? <Preloader /> : (
                 <Switch>
-                    <Route path="/sign-up">
-                        <Register 
+                <Route path="/sign-up">
+                    {!loggedIn ? (
+                        <Register
                         onRegister={onRegister}
                         errorReg={errorReg}
-                        errorMessage={errorMessage}
-                        setErrorMessage={setErrorMessage}
+                        message={message}
+                        setMessage={setMessage}
                         isLoading={isLoading}
-                        />
-                    </Route>
-                    <Route path="/sign-in">
-                        <Login 
+                    />
+                    ) : (
+                        <Redirect to="/movies" />
+                    )}  
+                </Route>
+                <Route path="/sign-in">
+                    {!loggedIn ? (
+                        <Login
                         onLogin={onLogin}
-                        errorMessage={errorMessage}
-                        setErrorMessage={setErrorMessage}
+                        message={message}
+                        setMessage={setMessage}
                         isLoading={isLoading}
-                        />
-                    </Route>
-                    <Route exact path="/">
-                        <Main />
-                    </Route>
-                    <Route path="/movies">
-                        <Movies loggedIn={true}/>
-                    </Route>
-                    <Route path="/saved-movies">
-                        <SavedMovies loggedIn={true}/>
-                    </Route>
-                    <ProtectedRoute 
-                         path="/profile"
-                         state={state}
-                         loggedIn={loggedIn}
-                         onUpdateUser={handleUpdateUser}
-                         onSignOut={onSignOut}
-                         errorMessage={errorMessage}
-                         setErrorMessage={setErrorMessage}
-                         component ={Profile}/>
-                    <Route path="*">
-                        <PageNotFound loggedIn={true}/>
-                    </Route>
-                </Switch>
-            </CurrentUserContext.Provider>
+                    />
+                    ) : (
+                        <Redirect to="/movies" />
+                    )}
+                </Route>
+                <ProtectedRoute
+                    path="/profile"
+                    component={Profile}
+                    state={state}
+                    isLoading={isLoading}
+                    loggedIn={loggedIn}
+                    onUpdateUser={onUpdateUser}
+                    onSignOut={onSignOut}
+                />
+                <Route exact path="/">
+                    <Main 
+                    loggedIn={loggedIn}
+                    />
+                </Route>
+                <ProtectedRoute
+                    path="/movies"
+                    component={Movies}
+                    isLoading={isLoading}
+                    loggedIn={loggedIn}
+                    state={state}
+                    onFindMovies={onFindMovies}
+                    displayMovies={displayMovies}
+                    onSaveMovies={onSaveMovies}
+                    moviesBasic={movies}
+                    onSwitchCheckbox={onSwitchCheckbox}
+                    checked={checked}
+                    onAddMovie={onAddMovie}
+                    findMovies={findMovies}
+                    onDeleteMovie={onDeleteMovie}
+                    message={message}
+                    setMessage={setMessage}
+                />
+                <ProtectedRoute
+                    path="/saved-movies"
+                    component={SavedMovies}
+                    isLoading={isLoading}
+                    loggedIn={loggedIn}
+                    state={state}
+                    onSaveFindMovies={onSaveFindMovies}
+                    findMoviesBasic={findMoviesBasic}
+                    onDeleteMovie={onDeleteMovie}
+                    moviesBasic={movies}
+                    onSavedCheckbox={onSavedCheckbox}
+                    checkedSave={checkedSave}
+                />
+                
+                <Route path="*">
+                    <PageNotFound/>
+                </Route>
+            </Switch>
+            )}
+        </CurrentUserContext.Provider>
     )
 }
 

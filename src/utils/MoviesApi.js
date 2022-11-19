@@ -10,6 +10,7 @@ function handleResponse(res) {
 
 export const getMovie =() => {
     return fetch(`${BASE_URL_BEATFILM}`, {
+        method: "GET",
         headers: {
             "Content-Type": "application/json"
         },

@@ -1,17 +1,19 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState} from 'react';
 import {useForm} from 'react-hook-form';
-import { CurrentUserContext } from '../../contexts/CurrentUserContext';
 import Header from '../Header/Header';
 import './Profile.css';
+import {useCurrentUserContext} from "../../contexts/CurrentUserContext";
 
-function Profile({ state, loggedIn, onUpdateUser, onSignOut, errorMessage, setErrorMessage, isLoading }) {
-    const currentUser = React.useContext(CurrentUserContext);
-    const [isDisabled, setIsDisabled] = React.useState(true);
+function Profile({ state, isLoading, loggedIn, onUpdateUser, onSignOut}) {
+
+    const {user} = useCurrentUserContext();
+    const currentUser = user?.user;
+    const [isDisabled, setIsDisabled] = useState(true);
     const {
         register,
         handleSubmit,
-        formState: {errors, isDirty, isValid},
-        reset,
+        formState: {errors, isValid},
+        reset,       
     } = useForm({
         mode: "onChange",
         defaultValues: {
@@ -21,22 +23,20 @@ function Profile({ state, loggedIn, onUpdateUser, onSignOut, errorMessage, setEr
     });
 
     useEffect(() => {
-        reset(currentUser)
-    }, [currentUser])
+        reset(currentUser);
+    }, [currentUser]);
 
-    function handleEdit() {
+    function onEdit() {
         setIsDisabled(false);
     }
 
-    const onSubmit = (data) => {
-        if ((data.name !== currentUser.name) || (data.email !== currentUser.email)) {
+    function onSubmit(data) {
+        if ((currentUser.name !==  data.name  ) || ( currentUser.email !== data.email)) {
             onUpdateUser({name: data.name, email: data.email})
-            setErrorMessage('Данные успешно сохранены')
             setIsDisabled(true)
-        } else {
-            setErrorMessage("Данные не изменены.")
-        }
+        };
     }
+
     function handleSignOut() {
         onSignOut()
     }
@@ -47,14 +47,10 @@ function Profile({ state, loggedIn, onUpdateUser, onSignOut, errorMessage, setEr
             <main className='main'>
                 <section className="profile">
                     <form className="profile__form" onSubmit={handleSubmit(onSubmit)}>
-                        <h3 className="profile__title">{`Привет, ${currentUser.name}!`}</h3>
+                        <h3 className="profile__title">Привет, {currentUser.name}!</h3>
                         <div className="profile__content">
                             <label className="profile__text" htmlFor='userName'>Имя</label>
                             <input className="profile__inputs"
-                                id="userName"
-                                name="name"
-                                type="text"
-                                placeholder='Имя'
                                 {...register("name", {
                                     required: "Имя должно быть заполнено",
                                     minLength: {
@@ -68,17 +64,15 @@ function Profile({ state, loggedIn, onUpdateUser, onSignOut, errorMessage, setEr
                                       message: "Имя введено некорректно"
                                     }
                                   })}
-                                  disabled={isDisabled ||isLoading}
+                                  placeholder='Имя'
+                                  type="text"
+                                  disabled={isDisabled || isLoading}
                                  />
                         </div>
                         {errors?.name && <span className='profile__text profile__text_error'>{errors.name.message}</span>}
                         <div className="profile__content">
                             <label className="profile__text" htmlFor='userEmail'>Email</label>
                             <input className="profile__inputs profile__inputs_email"
-                                id="userEmail"
-                                name="email"
-                                type="email"
-                                placeholder='Email'
                                 {...register("email", {
                                     required: "Почта должна быть заполнена",
                                     pattern: {
@@ -86,19 +80,26 @@ function Profile({ state, loggedIn, onUpdateUser, onSignOut, errorMessage, setEr
                                       message: "Почта введена некорректно",
                                     }
                                   })}
-                                  disabled={isDisabled ||isLoading}
+                                  placeholder="Email"
+                                  type="email"
+                                  disabled={isDisabled || isLoading}
                                 />
                         </div>
                         {errors?.email && <span className='profile__text profile__text_error'>{errors.email.message}</span>}
-                        <button className={`${isDisabled ? 'profile__submit-button' : 'profile__submit-button_hidden'}`}
-                            type="button"
+                        <button className={`${isDisabled ? 'profile__submit-button' : 'profile__submit-button profile__submit-button_hidden'}`}
+                            type="submit"
                             area-lebel="Редактировать профиль"
-                            onClick={handleEdit}>Редактировать
+                            onClick={onEdit}>Редактировать
                         </button>
                         <button className={`${isDisabled ? 'profile__submit-button profile__submit-button_exit' : 'profile__submit-button_hidden'}`}
                             type="button"
                             area-lebel="Выйти из аккаунта"
                             onClick={handleSignOut}>Выйти из аккаунта
+                        </button>
+                        <button className={`profile__submit-button profile__submit-button_save
+                          ${isValid && 'profile__submit-button_save_able'}
+                          ${isDisabled && 'profile__submit-button_hidden'}`}
+                            type="submit">Сохранить
                         </button>
                     </form>
                 </section>

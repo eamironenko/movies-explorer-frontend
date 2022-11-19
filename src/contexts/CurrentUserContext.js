@@ -1,2 +1,6 @@
 import React from "react";
-export const CurrentUserContext = React.createContext({});
+import { useContext} from "react"
+export const CurrentUserContext = React.createContext({user:{}});
+export const useCurrentUserContext = () => {
+    return useContext(CurrentUserContext)
+}
