@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import {useForm} from 'react-hook-form';
 import './SearchForm.css';
 import logoFind from '../../images/find_logo.svg';
@@ -9,13 +9,13 @@ function SearchForm({
     onSwitchCheckbox, 
     onFindMovies, 
     checked, 
-    isSaved}) {
+    isSavePage}) {
     
-    let searchTextLocal = ''
-    if (isSaved) {localStorage.getItem('textSave') ? searchTextLocal=localStorage.getItem('textSave') : searchTextLocal='';
+    let queryLocal = ''
+    if (isSavePage) {localStorage.getItem('querySave') ? queryLocal=localStorage.getItem('querySave') : queryLocal='';
     } else {
-        localStorage.getItem('text') ? searchTextLocal = localStorage.getItem('text') : searchTextLocal='';
-    } 
+        localStorage.getItem('query') ? queryLocal = localStorage.getItem('query') : queryLocal='';
+    }
 
     const {
         register,
@@ -23,16 +23,16 @@ function SearchForm({
         formState: {errors},
     } = useForm ({
         mode: "onSubmit",
-        defaultValues: {searchText: searchTextLocal}
+        defaultValues: {query: queryLocal}
     });
 
     const onSubmit=(data) =>{
-        onFindMovies(data.searchText, checked)
+        onFindMovies(data.query, checked)
     }
     function ChangeCheckbox() {
-        onSwitchCheckbox(searchTextLocal);
+        onSwitchCheckbox(queryLocal);
     }
-
+    
     return (
         <div className="searchForm">
             <form className="searchForm__container" onSubmit={handleSubmit(onSubmit)}>
@@ -41,11 +41,11 @@ function SearchForm({
                         type="text"
                         placeholder='Фильм'
                         disabled={isLoading}
-                        {...register('searchText', {
+                        {...register('query', {
                             required: "Нужно ввести ключевое слово"
                         })}
                     />
-                    {errors?.searchText && <span className='searchForm__error'>{errors.searchText.message}</span>}
+                    {errors?.query && <span className='searchForm__error'>{errors.query.message}</span>}
                     <button className="searchForm__button" type="submit" disabled={isLoading}>
                         <img className="searchForm__logo" alt="Логотип поиска" src={logoFind} />
                     </button>

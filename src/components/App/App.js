@@ -1,5 +1,5 @@
 import React, { useState, useEffect} from 'react';
-import { Redirect, Route, Switch, useHistory, useLocation } from 'react-router-dom';
+import { Redirect, Route, Switch, useHistory } from 'react-router-dom';
 import { CurrentUserContext } from '../../contexts/CurrentUserContext';
 import ProtectedRoute from '../ProtectedRoute/ProtectedRoute';
 //-----Блоки
@@ -18,14 +18,7 @@ import * as mainApi from '../../utils/MainApi';
 import * as constants from '../../utils/constants';
 import * as screenSize from '../../utils/screenSize';
 import { desktop, tablet, mobile } from '../../utils/constants';
-import { 
-    SERVER_ERR,
-    NOT_FOUND_ERR,
-    INVALID_DATA_ERR,
-    UNAUTHORIZED_ERR,
-    CONFLICT_ERR,
-    UPDATE_ERR,
-    UPDATE_SUCCESS
+import { SERVER_ERR, NOT_FOUND_ERR, INVALID_DATA_ERR, UNAUTHORIZED_ERR, CONFLICT_ERR,
 } from '../../utils/errMessage';
 
 const App = () => {
@@ -38,17 +31,16 @@ const App = () => {
     const history = useHistory();
     let screenWidth = screenSize.useCurrentWidth();
 
-    const [allMovies, setAllMovies] = useState([]); //все фильмы с сервака
-    const [movies, setMovies] = useState([]); //фильмы на клиентской части
-    const [displayMovies, setDisplayMovies] = useState([]); //количество показанных на странице фильмов
-    const [findMovies, setFindMovies] = useState([]); //найденные по поиску
-    const [findMoviesBasic, setFindMoviesBasic] = useState([]); // отсортированные
-    const [loadMovies, setLoadMovies] = useState(''); // на старнице
-    const [loadMoreMovies, setLoadMoreMovies] = useState(''); // дополнительные 3 по кнопке еще
+    const [allMovies, setAllMovies] = useState([]);
+    const [movies, setMovies] = useState([]);
+    const [displayMovies, setDisplayMovies] = useState([]); 
+    const [findMovies, setFindMovies] = useState([]); 
+    const [findMoviesBasic, setFindMoviesBasic] = useState([]);
+    const [loadMovies, setLoadMovies] = useState('');
+    const [loadMoreMovies, setLoadMoreMovies] = useState('');
   
     let localChecked = false;
-    let localCheckedSave = false;
-    
+    let localCheckedSave = false; 
     const [checked, setChecked] = React.useState(localChecked);
     const [checkedSave, setCheckedSave] = React.useState(localCheckedSave);
     
@@ -59,7 +51,7 @@ const App = () => {
         }
     }, [loggedIn]);
     
-    //-----Формат отображения карточек
+    //-----формат отображения карточек
     useEffect(() => {
         if (screenWidth <= 768 && screenWidth > 320) {
             setLoadMovies(tablet.amount);
@@ -118,7 +110,7 @@ const App = () => {
         }
     }, [loggedIn]);
 
-    //-----Работа с фильмаи
+    //-----работа с фильмаи
     const getAllMovies = () => {
         setIsLoading(true);
         moviesApi.getMovie()
@@ -153,7 +145,7 @@ const App = () => {
         setChecked(!checked);
         onFindMovies(query, !checked);
     }
-    
+    //-----операции с фильмами
     const onSaveMovies = (data) => { 
         setIsLoading(true);
         mainApi.saveMovie(data)
@@ -170,29 +162,28 @@ const App = () => {
             setIsLoading(false)})
     }
 
-    const onSaveFindMovies = (querySave, checkedSave) => {    // поиск в сохраненных фильмах
-        const searchQuery = querySave.toLowerCase();
+    const onSaveFindMovies = (querySave, checkedSave) => {
+        const searchQueryBasic = querySave.toLowerCase();
         localStorage.getItem('checkedSave') ==="true" ? localCheckedSave=true : localCheckedSave=false;
         if (localStorage.getItem('checkedSave')) {
             if (localStorage.getItem('checkedSave') === "true") {
                 localCheckedSave=true
             }
         }
-
-        const searchMovies = movies.filter(element => 
-            (element.nameRU.toLowerCase().includes(searchQuery)
-            || element.nameEN.toLowerCase().includes(searchQuery))
-            & (checkedSave ? element.duration<constants.timing : element.duration>0));
-
-            setFindMoviesBasic(searchMovies);
-            localStorage.setItem('checkedSave', checkedSave);
-            localStorage.setItem('querySave', querySave);
-            localStorage.setItem('moviesBasic', JSON.stringify(searchMovies));
-        
-            if (searchMovies.length === 0) {
+        const searchMoviesBasic = movies.filter(element => 
+            (element.movie.nameRU.toLowerCase().includes(searchQueryBasic)
+            || element.movie.nameEN.toLowerCase().includes(searchQueryBasic))
+            & (checkedSave ? element.movie.duration<constants.timing : element.movie.duration>0));
+            
+            if (searchMoviesBasic.length === 0) {
                 setFindMoviesBasic([]);
                 setMessage(NOT_FOUND_ERR);
             }
+            //debugger
+            setFindMoviesBasic(searchMoviesBasic);
+            localStorage.setItem('checkedSave', checkedSave);
+            localStorage.setItem('querySave', querySave);
+            localStorage.setItem('moviesBasic', JSON.stringify(searchMoviesBasic));    
     }
     
     const onSavedCheckbox = (querySave) => {
@@ -215,7 +206,7 @@ const App = () => {
         .finally(() => {
             setIsLoading(false)})
     }
-
+    //-----работа с аккаунтом
     const setStatusToken = (jwt) => {
         mainApi.checkToken(jwt)
             .then((res) => {

@@ -5,7 +5,7 @@ import './Register.css';
 
 import registerLogo from '../../images/login_logo.svg'
 
-const Register = ({ onRegister, errorReg, errorMessage, setErrorMessage, isLoading }) => {
+const Register = ({ onRegister, errorReg, message, setMessage, isLoading }) => {
     const {
       register,
       handleSubmit,
@@ -22,7 +22,7 @@ const Register = ({ onRegister, errorReg, errorMessage, setErrorMessage, isLoadi
     }
     
     const clearErrorRegister = () => {
-      setErrorMessage('')
+      setMessage('')
     }
     
     return (
@@ -78,7 +78,7 @@ const Register = ({ onRegister, errorReg, errorMessage, setErrorMessage, isLoadi
             disabled={isLoading}
             />
           {errors?.email && <span className="register__text register__text_error register__text_visible">{errors.password.message}</span>}
-          <span className={`${errorReg ? 'register__text register__text_error' : 'register__text_visible'}`}>{errorMessage}</span>
+          <span className={`${errorReg ? 'register__text register__text_error' : 'register__text_visible'}`}>{message}</span>
           <button 
              className={`${Object.keys(errors).length === 0 && isDirty &&  isValid ? 'register__submit-button' : 'register__submit-button register__submit-button_disabled'}`} 
              type="submit" 

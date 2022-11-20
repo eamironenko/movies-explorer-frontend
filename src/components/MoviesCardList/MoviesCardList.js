@@ -1,4 +1,4 @@
-import React, {useMemo} from 'react';
+import React, {useMemo, useEffect} from 'react';
 import './MoviesCardList.css';
 import MoviesCard from '../MoviesCard/MoviesCard';
 import { Route, Switch } from 'react-router-dom';
@@ -15,23 +15,19 @@ function MoviesCardList({
   onAddMovie,
   findMovies,
   onDeleteMovie,
-  isSavePage
+  isSavePage,
 }) {
-  console.log(findMovies)
-  console.log(displayMovies)
+  
   const [disabledBtn, setDisabledBtn] = React.useState(false);
 
   const selectedMoviesId = useMemo(() => moviesBasic.map((movie) => {
-    // console.log (movie) 
-    return movie.movie.movieId}), [moviesBasic])
-  // console.log(selectedMoviesId)
-
+     return movie.movie.movieId}), [moviesBasic])
 
   function handleLoadMore() {
     onAddMovie(findMovies);
   }
   
-  React.useEffect(() => {
+  useEffect(() => {
     if (findMovies.length === displayMovies.length ||
       findMovies.length < displayMovies.length) {
       setDisabledBtn(true);
@@ -56,8 +52,7 @@ function MoviesCardList({
                 icon={!selectedMoviesId.includes(movie.movie?.movieId?? movie.id) ? likeButton :  isSavePage ? closeButton : savedButton}
                 isSavePage={isSavePage}
                 />
-            )
-        }
+            )}
         )}
       </section>
       <Switch>
@@ -71,7 +66,6 @@ function MoviesCardList({
       </Switch>
     </>
   )
-
 }
 
 export default MoviesCardList;

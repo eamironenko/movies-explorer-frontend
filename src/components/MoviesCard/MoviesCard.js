@@ -5,11 +5,11 @@ import { BASE_URL_image } from '../../utils/constants';
 function MoviesCard({ 
   movie, 
   onSaveMovies, 
-  isLoading, 
-  isSaved, 
+  isLoading,
   onDeleteMovie, 
   icon, 
-  isSavePage}) {
+  isSavePage,
+}) {
 
   const handleAddMovie = () => {
     onSaveMovies(movie);
@@ -17,10 +17,7 @@ function MoviesCard({
   const handleDeleteMovie = () => {
       onDeleteMovie(movie)
   }
-  //console.log(movie)
-  //console.log(isSavePage)
-  //console.log(isSaved)
-  
+    
   return (
     <li className="moviesCardList__element">
       <div className="moviesCardList__caption">
@@ -30,11 +27,11 @@ function MoviesCard({
         </div>
         <button className="moviesCardList__save"
           type="button"
-          onClick={isSavePage  ? handleDeleteMovie : handleAddMovie}
+          onClick={isSavePage ? handleDeleteMovie : handleAddMovie}
           disabled={isLoading}>
           <img className='moviesCardList__savePic'
             src={icon}
-            alt={isSaved ? "Кнопка удаления фильма": "Кнопка сохранения фильма"} />
+            alt={isSavePage ? "Кнопка удаления фильма" : "Кнопка сохранения фильма"} />
         </button>
       </div>
       <a className='movieCardList__link'
@@ -48,4 +45,5 @@ function MoviesCard({
     </li>
   )
 }
+
 export default MoviesCard;

@@ -19,8 +19,6 @@ function SavedMovies({
     checkedSave
 }) {
 
-  console.log(moviesBasic);
-
   return (
     <div className='page'>
       {isLoading ? <Preloader /> : ''}
@@ -32,6 +30,7 @@ function SavedMovies({
             onFindMovies={onSaveFindMovies}
             onSwitchCheckbox={onSavedCheckbox}
             checked={checkedSave}
+            isSavePage
           />
           <MoviesCardList
             isLoading={isLoading}

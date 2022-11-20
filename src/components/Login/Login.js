@@ -4,7 +4,7 @@ import { useForm} from 'react-hook-form';
 import loginLogo from '../../images/login_logo.svg'
 import './Login.css';
 
-const Login = ({ onLogin, errorMessage, setErrorMessage, isLoading }) => {
+const Login = ({ onLogin, errorMessage, setMessage, isLoading }) => {
     const {
         register,
         handleSubmit,
@@ -20,7 +20,7 @@ const Login = ({ onLogin, errorMessage, setErrorMessage, isLoading }) => {
     }
 
     const clearErrorLogin = () => {
-        setErrorMessage('');
+        setMessage('');
       }
    
     return (
