@@ -230,7 +230,7 @@ const App = () => {
         return mainApi.register(name, email, password)
           .then((res) => {
             if (res) {
-              onLogin({ email: res.email, password: password });
+              onLogin({ email: res.email, password: res.password });
             } else {
               setMessage(CONFLICT_ERR);
               history.push('/sign-up')
@@ -256,6 +256,7 @@ const App = () => {
               localStorage.setItem('jwt', res.token);
               setChecked(false);
               setCheckedSave(false);
+              history.push('/movies');
             } else {
               setMessage(UNAUTHORIZED_ERR);
             }

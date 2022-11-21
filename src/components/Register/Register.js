@@ -51,7 +51,6 @@ const Register = ({ onRegister, errorReg, message, setMessage, isLoading }) => {
           {errors?.name && <span className={`${errors.name ? 'register__text register__text_error' : 'register__text_visible'}`}>{errors.name.message}</span>}
           <label className="register__text" htmlFor='userEmail'>E-mail</label>
           <input className="register__inputs register__inputs_email"
-            
             {...register("email", {
               required: "Почта должна быть заполнена",
               pattern: {
@@ -77,8 +76,8 @@ const Register = ({ onRegister, errorReg, message, setMessage, isLoading }) => {
             type="password"
             disabled={isLoading}
             />
-          {errors?.email && <span className="register__text register__text_error register__text_visible">{errors.password.message}</span>}
-          <span className={`${errorReg ? 'register__text register__text_error' : 'register__text_visible'}`}>{message}</span>
+          {errors?.password && <span className="register__text register__text_error register__text_visible">{errors.password.message}</span>}
+          <span className={`${errorReg ? 'register__text register__text_error' : 'register__text_visible'}`}>{errorReg}</span>
           <button 
              className={`${Object.keys(errors).length === 0 && isDirty &&  isValid ? 'register__submit-button' : 'register__submit-button register__submit-button_disabled'}`} 
              type="submit" 
