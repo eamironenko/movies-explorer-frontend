@@ -45,7 +45,7 @@ const App = () => {
     const [checkedSave, setCheckedSave] = React.useState(localCheckedSave);
 
     let passwordReg='';
-    
+
     useEffect(() => {
         const jwt = localStorage.getItem('jwt');
         if (jwt) {
@@ -229,13 +229,14 @@ const App = () => {
 
     const onRegister = ({ name, email, password }) => {
         setIsLoading(true);
+        passwordReg = password
         return mainApi.register(name, email, password)
           .then((res) => {
             if (res) {
               onLogin({ email: res.email, password: passwordReg });
             } else {
               setMessage(CONFLICT_ERR);
-              history.push('/sign-un');
+              history.push('/sign-up');
             }
           })
           .catch((err) => {
@@ -256,9 +257,9 @@ const App = () => {
         .then((res) => {
             if (res.token) {
               localStorage.setItem('jwt', res.token);
-              setChecked(false);
-              setCheckedSave(false);
               history.push('/movies');
+              setChecked(false);
+              setCheckedSave(false);              
             } else {
               setMessage(UNAUTHORIZED_ERR);
             }
@@ -304,29 +305,21 @@ const App = () => {
             {isLoading ? <Preloader /> : (
                 <Switch>
                 <Route path="/sign-up">
-                    {!loggedIn ? (
-                        <Register
-                        onRegister={onRegister}
-                        errorReg={errorReg}
-                        message={message}
-                        setMessage={setMessage}
-                        isLoading={isLoading}
-                    />
-                    ) : (
-                        <Redirect to="/movies" />
-                    )}  
+                <Register
+                    onRegister={onRegister}
+                    errorReg={errorReg}
+                    message={message}
+                    setMessage={setMessage}
+                    isLoading={isLoading}
+                    /> 
                 </Route>
                 <Route path="/sign-in">
-                    {!loggedIn ? (
-                        <Login
-                        onLogin={onLogin}
-                        message={message}
-                        setMessage={setMessage}
-                        isLoading={isLoading}
+                <Login
+                    onLogin={onLogin}
+                    message={message}
+                    setMessage={setMessage}
+                    isLoading={isLoading}
                     />
-                    ) : (
-                        <Redirect to="/movies" />
-                    )}
                 </Route>
                 <ProtectedRoute
                     path="/profile"
