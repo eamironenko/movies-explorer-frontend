@@ -43,6 +43,8 @@ const App = () => {
     let localCheckedSave = false; 
     const [checked, setChecked] = React.useState(localChecked);
     const [checkedSave, setCheckedSave] = React.useState(localCheckedSave);
+
+    let passwordReg='';
     
     useEffect(() => {
         const jwt = localStorage.getItem('jwt');
@@ -230,10 +232,10 @@ const App = () => {
         return mainApi.register(name, email, password)
           .then((res) => {
             if (res) {
-              onLogin({ email: res.email, password: res.password });
+              onLogin({ email: res.email, password: passwordReg });
             } else {
               setMessage(CONFLICT_ERR);
-              history.push('/sign-up')
+              history.push('/sign-un');
             }
           })
           .catch((err) => {
