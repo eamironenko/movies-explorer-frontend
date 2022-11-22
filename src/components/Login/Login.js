@@ -1,10 +1,10 @@
-import React from "react";
 import { Link } from "react-router-dom";
 import { useForm} from 'react-hook-form';
 import loginLogo from '../../images/login_logo.svg'
 import './Login.css';
 
-const Login = ({ onLogin, errorMessage, setMessage, isLoading }) => {
+const Login = ({ isLoading, onLogin, message, setMessage }) => {
+    
     const {
         register,
         handleSubmit,
@@ -56,7 +56,7 @@ const Login = ({ onLogin, errorMessage, setMessage, isLoading }) => {
                       disabled={isLoading}
                 />
                 {errors?.password && <span className="login__text login__text_error">{errors.password.message}</span>}
-                <span className={`${errorMessage ? 'login__text login__text_error' : 'login__text_visible'}`}>{errorMessage}</span>
+                <span className={`${message ? 'login__text login__text_error' : 'login__text_visible'}`}>{message}</span>
                 <button 
                   className={`${Object.keys(errors).length === 0 && isDirty && isValid ? 'login__submit-button' : 'login__submit-button login__submit-button_disabled'}`} 
                   disabled={!isDirty || !isValid}

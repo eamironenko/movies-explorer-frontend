@@ -76,7 +76,7 @@ const Register = ({ onRegister, errorReg, message, setMessage, isLoading }) => {
             type="password"
             disabled={isLoading}
             />
-          {errors?.password && <span className="register__text register__text_error register__text_visible">{errors.password.message}</span>}
+          {errors?.password && <span className="register__text register__text_error">{errors.password.message}</span>}
           <span className={`${errorReg ? 'register__text register__text_error' : 'register__text_visible'}`}>{errorReg}</span>
           <button 
              className={`${Object.keys(errors).length === 0 && isDirty &&  isValid ? 'register__submit-button' : 'register__submit-button register__submit-button_disabled'}`} 

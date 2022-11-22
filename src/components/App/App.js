@@ -26,7 +26,7 @@ const App = () => {
     const [loggedIn, setLoggedIn] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
     const [errorReg, setErrorReg] = useState(false);
-    const [message, setMessage] = useState('');
+    const [message, setMessage] = useState(null);
     const [state, setState] = useState(localStorage.getItem('jwt') || false);
     const history = useHistory();
     let screenWidth = screenSize.useCurrentWidth();
@@ -52,6 +52,57 @@ const App = () => {
             setStatusToken(jwt);
         }
     }, [loggedIn]);
+
+    const onLogin = ({ email, password }) => {
+        setIsLoading(true);
+        setMessage('');
+        return mainApi.authorize(email, password)
+        .then((res) => {
+            if (res.token) {
+                localStorage.setItem('jwt', res.token);
+                history.push('/movies');
+                setLoggedIn(true);
+                setChecked(false);
+                setCheckedSave(false);             
+            }
+        })
+        .catch((err) => {
+            debugger
+            if ( err.status === 409) {
+                setMessage(CONFLICT_ERR);
+            } else if ( err.status === 500) {
+                setMessage(SERVER_ERR);
+            } else if ( err.status === 401) {
+                setMessage(UNAUTHORIZED_ERR);
+            }
+            console.log(err)
+        })
+        .finally(() => setIsLoading(false));
+    }
+    
+    const onRegister = ({ name, email, password }) => {
+        setIsLoading(true);
+        setMessage('');
+        passwordReg = password
+        return mainApi.register(name, email, password)
+          .then((res) => {
+            if (res) {
+              onLogin({ email: res.email, password: passwordReg });
+            } else {
+              history.push('/sign-up');
+            }
+          })
+          .catch((err) => {
+            if ( err.status === 409) {
+                setMessage(CONFLICT_ERR)
+            } else if ( err.status === 500) {
+                setMessage(SERVER_ERR);
+            }
+            setErrorReg(true);
+            console.log(err);
+          })
+          .finally(() => { setIsLoading(false)});
+    }
     
     //-----формат отображения карточек
     useEffect(() => {
@@ -227,54 +278,6 @@ const App = () => {
             })
     }
 
-    const onRegister = ({ name, email, password }) => {
-        setIsLoading(true);
-        passwordReg = password
-        return mainApi.register(name, email, password)
-          .then((res) => {
-            if (res) {
-              onLogin({ email: res.email, password: passwordReg });
-            } else {
-              setMessage(CONFLICT_ERR);
-              history.push('/sign-up');
-            }
-          })
-          .catch((err) => {
-            if ( err.status === 409) {
-                setMessage(CONFLICT_ERR)
-            } else if ( err.status === 500) {
-                setMessage(SERVER_ERR);
-            }
-            setErrorReg(true);
-            console.log(err);
-          })
-          .finally(() => { setIsLoading(false)});
-    }
-
-    const onLogin = ({ email, password }) => {
-        setIsLoading(true);
-        return mainApi.authorize(email, password)
-        .then((res) => {
-            if (res.token) {
-              localStorage.setItem('jwt', res.token);
-              history.push('/movies');
-              setChecked(false);
-              setCheckedSave(false);              
-            } else {
-              setMessage(UNAUTHORIZED_ERR);
-            }
-        })
-        .catch((err) => {
-            if ( err.status === 409) {
-                setMessage(CONFLICT_ERR)
-            } else if ( err.status === 500) {
-                setMessage(SERVER_ERR);
-            }
-            console.log(err) 
-        })
-        .finally(() => setIsLoading(false));
-    }
-
     const onUpdateUser = (data) => {
         setIsLoading(true);
         mainApi.editUserData(data)
@@ -291,36 +294,18 @@ const App = () => {
     }
 
     const onSignOut = () => {
-        setLoggedIn(false);
         localStorage.clear();
+        setLoggedIn(false);        
         setCurrentUser({});
         setAllMovies([]);
         setMovies([]);
-        setLoggedIn(false)
         history.push('/');
     }
     
     return (
-        <CurrentUserContext.Provider value={{user: currentUser}}>
-            {isLoading ? <Preloader /> : (
-                <Switch>
-                <Route path="/sign-up">
-                <Register
-                    onRegister={onRegister}
-                    errorReg={errorReg}
-                    message={message}
-                    setMessage={setMessage}
-                    isLoading={isLoading}
-                    /> 
-                </Route>
-                <Route path="/sign-in">
-                <Login
-                    onLogin={onLogin}
-                    message={message}
-                    setMessage={setMessage}
-                    isLoading={isLoading}
-                    />
-                </Route>
+        <CurrentUserContext.Provider value={{ user: currentUser }}>
+            {isLoading ? <Preloader /> : ''}
+            <Switch>
                 <ProtectedRoute
                     path="/profile"
                     component={Profile}
@@ -331,8 +316,7 @@ const App = () => {
                     onSignOut={onSignOut}
                 />
                 <Route exact path="/">
-                    <Main 
-                    loggedIn={loggedIn}
+                    <Main loggedIn={loggedIn}
                     />
                 </Route>
                 <ProtectedRoute
@@ -366,12 +350,29 @@ const App = () => {
                     onSavedCheckbox={onSavedCheckbox}
                     checkedSave={checkedSave}
                 />
-                
+                <Route path="/sign-in">
+                    {loggedIn ? <Redirect to='movies' /> :
+                        <Login
+                            onLogin={onLogin}
+                            message={message}
+                            setMessage={setMessage}
+                            isLoading={isLoading}
+                        />}
+                </Route>
+                <Route path="/sign-up" >
+                    <Register
+                        onRegister={onRegister}
+                        errorReg={errorReg}
+                        message={message}
+                        setMessage={setMessage}
+                        isLoading={isLoading}
+                    />
+                </Route>
                 <Route path="*">
-                    <PageNotFound/>
+                    <PageNotFound />
                 </Route>
             </Switch>
-            )}
+
         </CurrentUserContext.Provider>
     )
 }
