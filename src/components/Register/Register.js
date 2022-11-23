@@ -28,7 +28,9 @@ const Register = ({ onRegister, errorReg, message, setMessage, isLoading }) => {
     return (
       <section className="register">
         <form className="register__form" onSubmit={handleSubmit(onSubmit)}>
-          <img className="register__logo" src={registerLogo} alt="Лого на странице регистрации"/>
+          <Link to='/'>
+            <img className="register__logo" src={registerLogo} alt="Лого на странице регистрации" />
+          </Link>
           <h2 className="register__title">Добро пожаловать!</h2>
           <label className="register__text" htmlFor='userName'>Имя</label>
           <input className="register__inputs"

@@ -294,12 +294,12 @@ const App = () => {
     }
 
     const onSignOut = () => {
-        localStorage.clear();
-        setLoggedIn(false);        
+        localStorage.clear();      
         setCurrentUser({});
         setAllMovies([]);
         setMovies([]);
         history.push('/');
+        setLoggedIn(false);
     }
     
     return (

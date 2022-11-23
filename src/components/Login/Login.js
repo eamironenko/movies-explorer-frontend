@@ -26,19 +26,21 @@ const Login = ({ isLoading, onLogin, message, setMessage }) => {
     return (
         <section className="login">
             <form className="login__form" onSubmit={handleSubmit(onSubmit)}>
-                <img className="login__logo" src={loginLogo} alt="Лого на странице регистрации" />
+                <Link to='/'>
+                    <img className="login__logo" src={loginLogo} alt="Лого на странице регистрации" />
+                </Link>
                 <h2 className="login__title">Рады видеть!</h2>
                 <label className="login__text" htmlFor="userEmail">E-mail</label>
-                <input className="login__inputs login__inputs_email"                    
+                <input className="login__inputs login__inputs_email"
                     {...register("email", {
                         required: "Почта должна быть заполнена",
                         pattern: {
-                          value: /^[^@ ]+@[^@ ]+\.[^@ .]{2,}$/,
-                          message: "Почта введена некорректно",
+                            value: /^[^@ ]+@[^@ ]+\.[^@ .]{2,}$/,
+                            message: "Почта введена некорректно",
                         }
-                      })}
-                      type="email"
-                      disabled={isLoading}
+                    })}
+                    type="email"
+                    disabled={isLoading}
                 />
                 {errors?.email && <span className="login__text login__text_error">{errors.email.message}</span>}
                 <label className="login__text" htmlFor="userPassword">Пароль</label>
