@@ -3,8 +3,9 @@ import {useForm} from 'react-hook-form';
 import Header from '../Header/Header';
 import './Profile.css';
 import {useCurrentUserContext} from "../../contexts/CurrentUserContext";
+import {UPDATE_SUCCESS, UPDATE_UNSUCCESS } from '../../utils/errMessage';
 
-function Profile({ state, isLoading, loggedIn, onUpdateUser, onSignOut}) {
+function Profile({ state, isLoading, loggedIn, onUpdateUser, onSignOut, message, setMessage}) {
 
     const {user} = useCurrentUserContext();
     const currentUser = user?.user;
@@ -12,7 +13,7 @@ function Profile({ state, isLoading, loggedIn, onUpdateUser, onSignOut}) {
     const {
         register,
         handleSubmit,
-        formState: {errors, isValid},
+        formState: {errors, isValid, isDirty},
         reset,       
     } = useForm({
         mode: "onChange",
@@ -29,18 +30,21 @@ function Profile({ state, isLoading, loggedIn, onUpdateUser, onSignOut}) {
     function onEdit() {
         setIsDisabled(false);
     }
-
+    
     function onSubmit(data) {
         if ((currentUser.name !==  data.name  ) || ( currentUser.email !== data.email)) {
             onUpdateUser({name: data.name, email: data.email})
             setIsDisabled(true)
+            setMessage(UPDATE_SUCCESS)
+        } else {
+            setMessage(UPDATE_UNSUCCESS);
         };
     }
 
     function handleSignOut() {
         onSignOut()
     }
-
+    
     return (
         <div className="page">
             <Header loggedIn={loggedIn} />
@@ -86,6 +90,7 @@ function Profile({ state, isLoading, loggedIn, onUpdateUser, onSignOut}) {
                                 />
                         </div>
                         {errors?.email && <span className='profile__text profile__text_error'>{errors.email.message}</span>}
+                        <span className={`${isDisabled ? 'profile__text profile__text_error' : 'profile__text_visible'}`}>{message}</span>
                         <button className={`${isDisabled ? 'profile__submit-button' : 'profile__submit-button profile__submit-button_hidden'}`}
                             type="submit"
                             area-lebel="Редактировать профиль"
@@ -96,10 +101,10 @@ function Profile({ state, isLoading, loggedIn, onUpdateUser, onSignOut}) {
                             area-lebel="Выйти из аккаунта"
                             onClick={handleSignOut}>Выйти из аккаунта
                         </button>
-                        <button className={`profile__submit-button profile__submit-button_save
-                          ${isValid && 'profile__submit-button_save_able'}
-                          ${isDisabled && 'profile__submit-button_hidden'}`}
-                            type="submit">Сохранить
+                        <button className={
+                            `${isDisabled ? 'profile__submit-button_hidden' : isDirty ? 'profile__submit-button_save ' : 'profile__submit-button_save profile__submit-button_save_disable'}`}
+                            type="submit"
+                            disabled={!isDirty || !isValid}>Сохранить
                         </button>
                     </form>
                 </section>

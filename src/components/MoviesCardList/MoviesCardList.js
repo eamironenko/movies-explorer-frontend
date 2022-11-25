@@ -18,15 +18,11 @@ function MoviesCardList({
   isSavePage,
 }) {
   
-  const [disabledBtn, setDisabledBtn] = React.useState(false);
-
   const selectedMoviesId = useMemo(() => moviesBasic.map((movie) => {
      return movie.movie.movieId}), [moviesBasic])
-
-  function handleLoadMore() {
-    onAddMovie(findMovies);
-  }
   
+  const [disabledBtn, setDisabledBtn] = React.useState(false);
+
   useEffect(() => {
     if (findMovies.length === displayMovies.length ||
       findMovies.length < displayMovies.length) {
@@ -35,6 +31,10 @@ function MoviesCardList({
       setDisabledBtn(false);
     }
   }, [ displayMovies.length, findMovies.length]);
+
+  function handleLoadMore() {
+    onAddMovie(findMovies);
+  }
 
   return (
     <>

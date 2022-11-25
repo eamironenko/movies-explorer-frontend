@@ -7,6 +7,7 @@ import MoviesCardList from '../MoviesCardList/MoviesCardList';
 import Footer from '../Footer/Footer';
 import Preloader from '../Preloader/Preloader';
 
+
 function SavedMovies({
     isLoading,
     loggedIn,
@@ -21,8 +22,7 @@ function SavedMovies({
 
   return (
     <div className='page'>
-      {isLoading ? <Preloader /> : ''}
-      <Header loggedIn={loggedIn} />
+      <Header loggedIn={loggedIn}/>
       <main className='main'>
         <div className='savedMovies'>
           <SearchForm

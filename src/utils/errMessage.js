@@ -5,6 +5,7 @@ const UNAUTHORIZED_ERR = 'Неправильный логин или парол�
 const CONFLICT_ERR = 'Пользователь с таким email уже существует';
 const UPDATE_ERR = 'Ошибка при обновлении данных';
 const UPDATE_SUCCESS = 'Данные успешно обновлены';
+const UPDATE_UNSUCCESS = 'При обновлении профиля произошла ошибка';
 
 export {
   SERVER_ERR,
@@ -13,5 +14,6 @@ export {
   UNAUTHORIZED_ERR,
   CONFLICT_ERR,
   UPDATE_ERR,
-  UPDATE_SUCCESS
+  UPDATE_SUCCESS,
+  UPDATE_UNSUCCESS 
 };
