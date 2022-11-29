@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import {useForm} from 'react-hook-form';
 import './SearchForm.css';
 import logoFind from '../../images/find_logo.svg';
@@ -11,11 +11,15 @@ function SearchForm({
     checked, 
     isSavePage}) {
     
+    const [query, setQuery]=useState('')
     let queryLocal = ''
     if (isSavePage) {localStorage.getItem('querySave') ? queryLocal=localStorage.getItem('querySave') : queryLocal='';
     } else {
         localStorage.getItem('query') ? queryLocal = localStorage.getItem('query') : queryLocal='';
     }
+    useEffect(() => {
+        setQuery(queryLocal)
+    }, [queryLocal])
 
     const {
         register,

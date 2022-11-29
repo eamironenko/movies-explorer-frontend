@@ -18,6 +18,7 @@ function Movies({
   checked,
   onAddMovie,
   findMovies,
+  message,
   setMessage,
   onDeleteMovie,
   }) {
@@ -41,6 +42,8 @@ function Movies({
                         onAddMovie={onAddMovie}
                         findMovies={findMovies}
                         onDeleteMovie={onDeleteMovie}
+                        message={message}
+                        setMessage={setMessage}
                     />
                 </div>
             </main>

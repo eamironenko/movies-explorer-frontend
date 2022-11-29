@@ -1,12 +1,10 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import './SavedMovies.css';
 
 import Header from '../Header/Header';
 import SearchForm from '../SearchForm/SearchForm';
 import MoviesCardList from '../MoviesCardList/MoviesCardList';
 import Footer from '../Footer/Footer';
-import Preloader from '../Preloader/Preloader';
-
 
 function SavedMovies({
     isLoading,
@@ -17,8 +15,10 @@ function SavedMovies({
     moviesBasic,
     onDeleteMovie,
     onSavedCheckbox,
-    checkedSave
+    checkedSave,
 }) {
+
+  //console.log(moviesBasic)
 
   return (
     <div className='page'>

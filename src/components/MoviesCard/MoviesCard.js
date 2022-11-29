@@ -9,15 +9,21 @@ function MoviesCard({
   onDeleteMovie, 
   icon, 
   isSavePage,
+  isSaved,
+  moviesBasic
 }) {
 
-  const handleAddMovie = () => {
-    onSaveMovies(movie);
-  }
-  const handleDeleteMovie = () => {
+
+ isSaved=moviesBasic.some(i => i.movieId === movie.id);
+  
+  function handleMovie() {
+    if (movie.id) {
+      moviesBasic.some(i => i.movieId === movie.id) ? onDeleteMovie(moviesBasic.find(i => i.movieId === movie.id)) : onSaveMovies(movie)
+    } else {
       onDeleteMovie(movie)
+    }
   }
-    
+
   return (
     <li className="moviesCardList__element">
       <div className="moviesCardList__caption">
@@ -27,7 +33,7 @@ function MoviesCard({
         </div>
         <button className="moviesCardList__save"
           type="button"
-          onClick={isSavePage ? handleDeleteMovie : handleAddMovie}
+          onClick={handleMovie}
           disabled={isLoading}>
           <img className='moviesCardList__savePic'
             src={icon}

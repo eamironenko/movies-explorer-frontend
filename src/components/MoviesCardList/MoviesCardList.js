@@ -16,11 +16,13 @@ function MoviesCardList({
   findMovies,
   onDeleteMovie,
   isSavePage,
+  setMessage,
+  message,
 }) {
   
   const selectedMoviesId = useMemo(() => moviesBasic.map((movie) => {
-     return movie.movie.movieId}), [moviesBasic])
-  
+    return movie.movieId}), [moviesBasic])
+    
   const [disabledBtn, setDisabledBtn] = React.useState(false);
 
   useEffect(() => {
@@ -38,6 +40,7 @@ function MoviesCardList({
 
   return (
     <>
+    <span className={`${message ? 'moviesCardList__error' : 'moviesCardList__error_visible'}`}>{message}</span>
     <section className="moviesCardList__container">
         {displayMovies.map((movie, movieId) => {
             return (
@@ -48,9 +51,10 @@ function MoviesCardList({
                 moviesBasic={moviesBasic}                
                 onSaveMovies={onSaveMovies}
                 onDeleteMovie={onDeleteMovie}
-                isSaved = {selectedMoviesId.includes(movie.movie?.movieI?? movie.id)}
-                icon={!selectedMoviesId.includes(movie.movie?.movieId?? movie.id) ? likeButton :  isSavePage ? closeButton : savedButton}
+                isSaved = {selectedMoviesId.includes(movie?.movieI?? movie.id)}
+                icon={!selectedMoviesId.includes(movie?.movieId?? movie.id) ? likeButton :  isSavePage ? closeButton : savedButton}
                 isSavePage={isSavePage}
+                setMessage={setMessage}
                 />
             )}
         )}
