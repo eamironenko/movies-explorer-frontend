@@ -12,17 +12,25 @@ function SavedMovies({
     state,
     onSaveFindMovies,
     findMoviesBasic,
+    setFindMoviesBasic,
     moviesBasic,
     onDeleteMovie,
     onSavedCheckbox,
     checkedSave,
+    message,
+    setMessage
 }) {
 
   //console.log(moviesBasic)
+  useEffect(() => {
+    //setFindMoviesBasic(moviesBasic);
+    localStorage.removeItem('querySave');
+    setMessage('');
+}, [])
 
   return (
     <div className='page'>
-      <Header loggedIn={loggedIn}/>
+      <Header loggedIn={loggedIn} setMessage={setMessage}/>
       <main className='main'>
         <div className='savedMovies'>
           <SearchForm
@@ -32,6 +40,7 @@ function SavedMovies({
             checked={checkedSave}
             isSavePage
           />
+          <span className={`${message ? 'savedMovies__error' : 'savedMovies__error_visible'}`}>{message}</span>
           <MoviesCardList
             isLoading={isLoading}
             displayMovies={findMoviesBasic}

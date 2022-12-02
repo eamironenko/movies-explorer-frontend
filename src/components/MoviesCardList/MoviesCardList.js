@@ -40,7 +40,6 @@ function MoviesCardList({
 
   return (
     <>
-    <span className={`${message ? 'moviesCardList__error' : 'moviesCardList__error_visible'}`}>{message}</span>
     <section className="moviesCardList__container">
         {displayMovies.map((movie, movieId) => {
             return (

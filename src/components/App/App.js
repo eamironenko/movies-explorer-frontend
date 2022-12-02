@@ -32,7 +32,7 @@ const App = () => {
     const screenWidth = screenSize.useCurrentWidth();
 
     const [allMovies, setAllMovies] = useState([]);
-    const [movies, setMovies] = useState(JSON.parse(localStorage.getItem('savedMovies')) || []);
+    const [movies, setMovies] = useState([]);
     const [displayMovies, setDisplayMovies] = useState([]);
     const [findMovies, setFindMovies] = useState([]);
     const [findMoviesBasic, setFindMoviesBasic] = useState([]);
@@ -44,7 +44,7 @@ const App = () => {
     const [checked, setChecked] = React.useState(localChecked);
     const [checkedSave, setCheckedSave] = React.useState(localCheckedSave);
     let passwordReg='';
-    
+
     useEffect(() => {
         const jwt = localStorage.getItem('jwt');
         if (jwt) {
@@ -52,21 +52,47 @@ const App = () => {
         }
     }, [loggedIn]);
 
-    const onLogin = ({ email, password }) => {
-        setIsLoading(true);
+    useEffect(() => {
+        localStorage.removeItem('checkedSave');
+        localStorage.removeItem('querySave');
+        setCheckedSave(false);
+        setFindMoviesBasic(movies);
+    }, []);
+    
+    const setStatusToken = (jwt) => {
         setMessage('');
+        mainApi.checkToken(jwt)
+            .then((res) => {
+                if (res) {
+                    setCurrentUser(res);
+                    setLoggedIn(true);
+                } else {
+                    setLoggedIn(false);
+                    localStorage.clear();
+                    setMovies([]);
+                }
+            })
+            .catch((err) => {
+                setMessage(SERVER_ERR);
+                console.log(err)
+            })
+    }
+    const onLogin = ({ email, password }) => {
+        setMessage('');
+        setIsLoading(true);
         return mainApi.authorize(email, password)
         .then((res) => {
             if (res.token) {
+                setLoggedIn(true);
                 localStorage.setItem('jwt', res.token);
                 history.push('/movies');
-                setLoggedIn(true);
                 setChecked(false);
-                setCheckedSave(false);             
+                setCheckedSave(false);        
+            } else {
+                setMessage(UNAUTHORIZED_ERR)
             }
         })
         .catch((err) => {
-            debugger
             if ( err.status === 409) {
                 setMessage(CONFLICT_ERR);
             } else if ( err.status === 500) {
@@ -79,8 +105,8 @@ const App = () => {
         .finally(() => setIsLoading(false));
     }
     const onRegister = ({ name, email, password }) => {
-        setIsLoading(true);
         setMessage('');
+        setIsLoading(true);
         passwordReg = password
         return mainApi.register(name, email, password)
           .then((res) => {
@@ -102,8 +128,8 @@ const App = () => {
           .finally(() => { setIsLoading(false)});
     }
     const onUpdateUser = (data) => {
-        setIsLoading(true);
         setMessage('');
+        setIsLoading(true);
         mainApi.editUserData(data)
         .then((res) => {
             setCurrentUser(res);
@@ -116,23 +142,10 @@ const App = () => {
             console.log(err)})
         .finally(() => { setIsLoading(false)});
     }
-    const setStatusToken = (jwt) => {
-        mainApi.checkToken(jwt)
-            .then((res) => {
-                if (res) {
-                    setLoggedIn(true);
-                    setCurrentUser(res);
-                } else {
-                    setLoggedIn(false);
-                    localStorage.clear();
-                    setMovies([]);
-                }
-            })
-            .catch((err) => {
-                setMessage(SERVER_ERR);
-                console.log(err)
-            })
-    }
+
+    useEffect(() => {
+        setFindMoviesBasic(movies)
+    }, [movies]);
 
     //-----формат отображения карточек
     useEffect(() => {
@@ -150,28 +163,18 @@ const App = () => {
         }
     }, [screenWidth]);
 
-    const listMovies = (movies) => {
-        return movies.slice(0, loadMovies);
-    }
-    const nextMovies = (movies) => {
-        return movies.slice(
-            displayMovies.length, 
-            (displayMovies.length + loadMoreMovies));
-    }
-    const onAddMovie = ()=> {
-        setDisplayMovies(displayMovies.concat(...nextMovies(findMovies)));
-    }
-
     //-----работа с фильмами
     useEffect(() => {
         if (loggedIn) {
             setIsLoading(true);
+            setMessage('');
             mainApi.getSavedMovies()
             .then((res) => {
-                setMovies(res.filter(i => i.owner === currentUser.user._id))
-
+                setMovies(res.filter(i => i.owner.toString() === currentUser._id))
+                                
                 const localFoundMovies = JSON.parse(localStorage.getItem('foundMovies'));
                 const localSavedFoundMovies = JSON.parse(localStorage.getItem('savedFoundMovies'));
+
                 if (localSavedFoundMovies) {
                     setFindMoviesBasic(localSavedFoundMovies);
                 }
@@ -195,7 +198,6 @@ const App = () => {
         setIsLoading(true);
         moviesApi.getMovie()
         .then ((res) => {
-            setMessage('');
             setAllMovies(res);
         })
         .catch((err) => {
@@ -204,10 +206,7 @@ const App = () => {
         })
         .finally(() => {setIsLoading(false)})
     }
-    useEffect(() => {
-        setFindMoviesBasic(movies)
-    }, [movies])
-
+    
     //--ищем фильмы по запросу
     const onFindMovies = (query, checked) => {
         const searchQuery = query.toLowerCase();
@@ -225,13 +224,13 @@ const App = () => {
         localStorage.setItem('checked',checked);
         localStorage.setItem('query', query);
         searchMovies.length === 0 ? setMessage(NOT_FOUND_ERR) : setMessage('');
-        }
-            
+    }
+
     const onSwitchCheckbox = (query) => {
         setChecked(!checked);
         onFindMovies(query, !checked);
     }
-          
+
     const onSaveFindMovies = (querySave, checkedSave) => {
         const searchQuerySave = querySave.toLowerCase();
         localStorage.getItem('checkedSave') ==="true" ? localCheckedSave=true : localCheckedSave=false;
@@ -239,7 +238,8 @@ const App = () => {
             if (localStorage.getItem('checkedSave') === "true") {
                 localCheckedSave=true
             }
-        }    
+        }
+        
         const searchMoviesSave = movies.filter(element => 
         (element.nameRU.toLowerCase().includes(searchQuerySave)
         || element.nameEN.toLowerCase().includes(searchQuerySave))
@@ -250,8 +250,8 @@ const App = () => {
         localStorage.setItem('checkedSave', checkedSave);
         localStorage.setItem('querySave', querySave);
         searchMoviesSave.length === 0 ? setMessage(NOT_FOUND_ERR) : setMessage('');
-        }  
-    
+    }
+
     const onSavedCheckbox = (querySave) => {
         setCheckedSave(!checkedSave);
         onSaveFindMovies(querySave, !checkedSave);
@@ -262,7 +262,7 @@ const App = () => {
         mainApi.saveMovie(data)
         .then((res) => {
             setMovies([...movies, res]);
-            //localStorage.setItem('savedMovies', JSON.stringify([...movies, res]))
+            localStorage.setItem('savedMovies', JSON.stringify([...movies, res]))
         })
         .catch((err) => {
             if (err.status === 400) {
@@ -273,7 +273,7 @@ const App = () => {
         .finally(() => {
             setIsLoading(false)})
     }
- 
+
     const onDeleteMovie =(data) => {
         setIsLoading(true);
         mainApi.deleteMovie(data)
@@ -289,19 +289,32 @@ const App = () => {
         .finally(() => {
             setIsLoading(false)})
     }
-
+    const listMovies = (movies) => {
+        return movies.slice(0, loadMovies);
+    }
+    const nextMovies = (movies) => {
+        return movies.slice(
+            displayMovies.length, 
+            (displayMovies.length + loadMoreMovies));
+    }
+    const onAddMovie = ()=> {
+        setDisplayMovies(displayMovies.concat(...nextMovies(findMovies)));
+    }
+    
     const onSignOut = () => {
+        setLoggedIn(false);
         localStorage.clear();      
         setCurrentUser({});
         setAllMovies([]);
         setMovies([]);
+        setFindMovies([]);
         history.push('/');
-        setLoggedIn(false);
+        setMessage('');
     }
    
     return (
         <CurrentUserContext.Provider value={{ user: currentUser }}>
-            {isLoading ? <Preloader /> :
+            {isLoading ? <Preloader /> : 
                 <Switch>
                     <ProtectedRoute
                         path="/profile"
@@ -344,13 +357,16 @@ const App = () => {
                         state={state}
                         onSaveFindMovies={onSaveFindMovies}
                         findMoviesBasic={findMoviesBasic}
+                        setFindMoviesBasic={setFindMoviesBasic}
                         onDeleteMovie={onDeleteMovie}
                         moviesBasic={movies}
                         onSavedCheckbox={onSavedCheckbox}
                         checkedSave={checkedSave}
+                        message={message}
+                        setMessage={setMessage}
                     />
                     <Route path="/sign-in">
-                        {loggedIn ? <Redirect to='movies' /> :
+                    {loggedIn ? <Redirect to="/movies" /> :
                             <Login
                                 onLogin={onLogin}
                                 message={message}

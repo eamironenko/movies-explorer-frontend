@@ -16,7 +16,7 @@ const Login = ({ isLoading, onLogin, message, setMessage }) => {
             email: data.email,
             password: data.password
         })
-        console.log(data);
+        //console.log(data);
     }
 
     const clearErrorLogin = () => {
@@ -25,7 +25,7 @@ const Login = ({ isLoading, onLogin, message, setMessage }) => {
    
     return (
         <section className="login">
-            <form className="login__form" onSubmit={handleSubmit(onSubmit)}>
+            <form className="login__form" onSubmit={handleSubmit(onSubmit)} setMessage={setMessage}>
                 <Link to='/'>
                     <img className="login__logo" src={loginLogo} alt="Лого на странице регистрации" />
                 </Link>

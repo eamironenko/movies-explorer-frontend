@@ -8,7 +8,8 @@ import {UPDATE_SUCCESS, UPDATE_UNSUCCESS } from '../../utils/errMessage';
 function Profile({ state, isLoading, loggedIn, onUpdateUser, onSignOut, message, setMessage}) {
 
     const {user} = useCurrentUserContext();
-    const currentUser = user?.user;
+    const currentUser = user
+    
     const [isDisabled, setIsDisabled] = useState(true);
     const {
         register,

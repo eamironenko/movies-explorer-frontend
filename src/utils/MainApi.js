@@ -1,6 +1,6 @@
 import { BASE_URL_image } from '../utils/constants';
-//export const BASE_URL = 'https://api.mironenko.diploma.nomoredomains.icu';
-export const BASE_URL = 'http://localhost:3000';
+export const BASE_URL = 'https://api.mironenko.diploma.nomoredomains.icu';
+//export const BASE_URL = 'http://localhost:3000';
 
 function handleResponse(res) {
     if (res.ok) {
@@ -48,7 +48,9 @@ export const checkToken = (token) => {
             'Authorization': `Bearer ${token}`,
         }
     })
-        .then(handleResponse)
+        .then((res) => {
+            return res.json();
+        })
 }
 
 export const getUserData = () => {

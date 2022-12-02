@@ -1,5 +1,5 @@
 import React from "react";
-import { Link } from 'react-router-dom';
+import { Link, NavLink } from 'react-router-dom';
 import './Navigation.css';
 import AccountButton from '../AccountButton/AccountButton';
 
@@ -16,8 +16,15 @@ function Navigation({ loggedIn }) {
             {loggedIn && (
                 <nav className="navigation__movies">
                     <div className='navigation__movies-buttons'>
-                        <Link className="navigation__movies-button" to="/movies" >Фильмы</Link>
-                        <Link className="navigation__movies-button navigation__button_movieSaved" to="/saved-movies" >Сохраненные&nbsp;фильмы</Link>
+                        <NavLink to="/movies"
+                            className="navigation__movies-button"
+                            activeClassName="navigation__movies-button navigation__movies-button_active">Фильмы
+                        </NavLink>
+                        <NavLink to="/saved-movies"
+                            className="navigation__movies-button navigation__button_movieSaved"
+                            activeClassName="navigation__movies-button navigation__button_movieSaved navigation__movies-button_active"
+                        >Сохраненные&nbsp;фильмы
+                        </NavLink>
                     </div>
                     <Link to="/profile" className="navigation__button navigation__button_account"><AccountButton /></Link>
                 </nav>

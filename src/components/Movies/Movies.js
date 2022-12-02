@@ -18,9 +18,9 @@ function Movies({
   checked,
   onAddMovie,
   findMovies,
+  onDeleteMovie,
   message,
   setMessage,
-  onDeleteMovie,
   }) {
 
     return (
@@ -34,6 +34,7 @@ function Movies({
                         onSwitchCheckbox={onSwitchCheckbox}
                         checked={checked}
                     />
+                    <span className={`${message ? 'movies__error' : 'movies__error_visible'}`}>{message}</span>
                     <MoviesCardList
                         isLoading={isLoading}
                         moviesBasic={moviesBasic}
@@ -42,8 +43,6 @@ function Movies({
                         onAddMovie={onAddMovie}
                         findMovies={findMovies}
                         onDeleteMovie={onDeleteMovie}
-                        message={message}
-                        setMessage={setMessage}
                     />
                 </div>
             </main>

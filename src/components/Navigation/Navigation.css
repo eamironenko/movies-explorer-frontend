@@ -60,6 +60,11 @@
     margin: 0 0 0 44px;
     padding: 0;
 }
+.navigation__movies-button_active {
+    font-weight: 900;
+    text-decoration: underline;
+}
+
 .navigation__movies-button:hover {
     opacity: 0.6;
     cursor: pointer;
