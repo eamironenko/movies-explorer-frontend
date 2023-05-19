@@ -2,16 +2,14 @@
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     grid-template-rows: repeat(4, 1fr);
-    /*grid-auto-columns: 33.3%;
-    grid-auto-rows: 271px;*/
     column-gap: 24px;
     row-gap: 30px;
     padding: 0;
-    margin: 0 auto;
+    margin: 0 70px;
     box-sizing: border-box;
     padding: 70px 0 30px;
-    margin: 0 70px;
 }
+
 .moviesCardList__container_type_save {
     grid-template-rows: none;
     column-gap: 20px;
@@ -35,9 +33,14 @@
     text-align: center;
 }
 
+.moviesCardList__button_visible {
+    visibility: hidden;
+}
+
 .moviesCardList__button:hover {
     opacity: 0.6;
 }
+
 .moviesCardList__button_type_save {
     visibility: hidden;
     cursor: default;
@@ -48,33 +51,31 @@
     .moviesCardList {
         margin: 0 30px;
     }
+
     .moviesCardList__container {
-        width: 100%;
-        /*grid-template-columns: repeat(2, calc((100% - 24px) / 2));
-        grid-template-rows: repeat(auto-fill, 309px);
-        grid-auto-columns: calc((100% - 24px) / 2);*/
         grid-template-columns: repeat(2, 1fr);
-        grid-template-rows: repeat(4, 1fr);        
+        grid-template-rows: repeat(4, 1fr);
+        margin: 0 30px;
         column-gap: 24px;
         row-gap: 35px;
     }
 }
 
-/*@media screen and (max-width: 767px) {
+@media screen and (max-width: 767px) {
     .moviesCardList__container {
         grid-template-rows: repeat(auto-fill, 309px);
         grid-template-columns: repeat(1, 1fr);
         grid-template-rows: repeat(5, 1fr);
         grid-auto-rows: 309px;
-        padding-bottom: 30px;
-        padding: 0;
+        padding: 0 0 30px;
+        margin: 0 10px;
     }
 
     .moviesCardList__button {
         font-size: 12px;
         line-height: 1.2px;
     }
-}*/
+}
 
 @media screen and (max-width: 600px) {
     .moviesCardList {
@@ -85,8 +86,8 @@
     .moviesCardList__container {
         display: flex;
         flex-direction: column;
-        width: 93.75%;
         gap: 16px;
+        margin: 0 10px;
     }
 
     .moviesCardList__button {

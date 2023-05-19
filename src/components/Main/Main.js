@@ -6,11 +6,14 @@ import Techs from '../Techs/Techs';
 import AboutMe from '../AboutMe/AboutMe';
 import Footer from '../Footer/Footer';
 import './Main.css';
+//import {useCurrentUserContext} from "../../contexts/CurrentUserContext";
 
-function Main() {
+function Main({loggedIn}) {
+    //const {user} = useCurrentUserContext();
+     
     return (
         <div className="page">
-            <Header loggedIn={false} />
+            <Header loggedIn={loggedIn} />
             <main className="main">
                 <Promo />
                 <AboutProject />

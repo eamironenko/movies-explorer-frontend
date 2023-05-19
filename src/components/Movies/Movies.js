@@ -4,28 +4,50 @@ import './Movies.css';
 import Header from '../Header/Header';
 import SearchForm from '../SearchForm/SearchForm';
 import MoviesCardList from '../MoviesCardList/MoviesCardList';
-import Preloader from '../Preloader/Preloader';
 import Footer from '../Footer/Footer';
 
-function Movies(loggedIn) {
-    const [isLoadding, setIsLoading]=React.useState(false);
+function Movies({
+  loggedIn,
+  isLoading,
+  state,
+  onFindMovies,
+  displayMovies,
+  onSaveMovies,
+  moviesBasic,
+  onSwitchCheckbox,
+  checked,
+  onAddMovie,
+  findMovies,
+  onDeleteMovie,
+  message,
+  setMessage,
+  }) {
 
     return (
         <div className='page'>
-            <Header loggedIn={loggedIn} />
+            <Header loggedIn={loggedIn} setMessage={setMessage} />
             <main className='main'>
                 <div className='movies'>
-                    <SearchForm />
-                    {isLoadding ? (
-                        <Preloader />
-                    ) : (
-                        <MoviesCardList />
-                    )}
+                    <SearchForm
+                        isLoading={isLoading}
+                        onFindMovies={onFindMovies}
+                        onSwitchCheckbox={onSwitchCheckbox}
+                        checked={checked}
+                    />
+                    <span className={`${message ? 'movies__error' : 'movies__error_visible'}`}>{message}</span>
+                    <MoviesCardList
+                        isLoading={isLoading}
+                        moviesBasic={moviesBasic}
+                        displayMovies={displayMovies}
+                        onSaveMovies={onSaveMovies}
+                        onAddMovie={onAddMovie}
+                        findMovies={findMovies}
+                        onDeleteMovie={onDeleteMovie}
+                    />
                 </div>
             </main>
             <Footer />
         </div>
-
     )
 }
 

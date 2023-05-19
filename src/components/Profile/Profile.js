@@ -1,68 +1,112 @@
-import React from 'react';
+import React, { useEffect, useState} from 'react';
+import {useForm} from 'react-hook-form';
 import Header from '../Header/Header';
 import './Profile.css';
-import useForm from '../../utils/useForm';
-import validate from '../../utils/validation'
+import {useCurrentUserContext} from "../../contexts/CurrentUserContext";
+import {UPDATE_SUCCESS, UPDATE_UNSUCCESS } from '../../utils/errMessage';
 
-const name = "Виталий";
-const email = "pochta@yandex.ru";
+function Profile({ state, isLoading, loggedIn, onUpdateUser, onSignOut, message, setMessage}) {
 
-function Profile({ loggedIn }) {
+    const {user} = useCurrentUserContext();
+    const currentUser = user
+    
+    const [isDisabled, setIsDisabled] = useState(true);
     const {
-        values,
-        handleChange,
-        errors,
-        isValid,
-        handleSubmit
-    } = useForm(editProfile, validate, "ep");
+        register,
+        handleSubmit,
+        formState: {errors, isValid, isDirty},
+        reset,       
+    } = useForm({
+        mode: "onChange",
+        defaultValues: {
+            name: currentUser.name,
+            email: currentUser.email,
+        }
+    });
 
-    const [isDisabled, setIsDisabled] = React.useState(true);
+    useEffect(() => {
+        reset(currentUser);
+    }, [currentUser]);
 
-    function handleEdit() {
+    function onEdit() {
         setIsDisabled(false);
     }
-
-    function editProfile() {
-        console.log('No errors, submit callback called')
+    
+    function onSubmit(data) {
+        if ((currentUser.name !==  data.name  ) || ( currentUser.email !== data.email)) {
+            onUpdateUser({name: data.name, email: data.email})
+            setIsDisabled(true)
+            setMessage(UPDATE_SUCCESS)
+        } else {
+            setMessage(UPDATE_UNSUCCESS);
+        };
     }
 
+    function handleSignOut() {
+        onSignOut()
+    }
+    
     return (
         <div className="page">
             <Header loggedIn={loggedIn} />
             <main className='main'>
                 <section className="profile">
-                    <form className="profile__form" onSubmit={handleSubmit}>
-                        <h3 className="profile__title">{`Привет, ${name}!`}</h3>
+                    <form className="profile__form" onSubmit={handleSubmit(onSubmit)}>
+                        <h3 className="profile__title">Привет, {currentUser.name}!</h3>
                         <div className="profile__content">
                             <label className="profile__text" htmlFor='userName'>Имя</label>
                             <input className="profile__inputs"
-                                id="userName"
-                                name="name"
-                                type="text"
-                                placeholder='Имя'
-                                autoComplete='off'
-                                value={values.name || ''}
-                                onChange={handleChange}
-                                disabled={isDisabled}
-                                required />
+                                {...register("name", {
+                                    required: "Имя должно быть заполнено",
+                                    minLength: {
+                                      value: 2,
+                                      message: "Имя должно быть более 2 знаков" },
+                                    maxLength: {
+                                      value: 30,
+                                      message: "Имя должно быть не более 30 знаков" },
+                                    pattern: {
+                                      value: /^[A-Za-zА-Яа-я ]+$/,
+                                      message: "Имя введено некорректно"
+                                    }
+                                  })}
+                                  placeholder='Имя'
+                                  type="text"
+                                  disabled={isDisabled || isLoading}
+                                 />
                         </div>
-                        <span className={`${errors.name ? 'profile__text profile__text_error' : 'profile__text_visible'}`}>{errors.name}</span>
+                        {errors?.name && <span className='profile__text profile__text_error'>{errors.name.message}</span>}
                         <div className="profile__content">
                             <label className="profile__text" htmlFor='userEmail'>Email</label>
                             <input className="profile__inputs profile__inputs_email"
-                                id="userEmail"
-                                name="email"
-                                type="email"
-                                placeholder='Email'
-                                autoComplete='off'
-                                value={values.email || ''}
-                                onChange={handleChange}
-                                disabled={isDisabled}
-                                required />
+                                {...register("email", {
+                                    required: "Почта должна быть заполнена",
+                                    pattern: {
+                                      value: /^[^@ ]+@[^@ ]+\.[^@ .]{2,}$/,
+                                      message: "Почта введена некорректно",
+                                    }
+                                  })}
+                                  placeholder="Email"
+                                  type="email"
+                                  disabled={isDisabled || isLoading}
+                                />
                         </div>
-                        <span className={`${errors.name ? 'profile__text profile__text_error' : 'profile__text_visible'}`}>{errors.name}</span>
-                        <button className={`${isDisabled ? 'profile__submit-button' : 'profile__submit-button_hidden'}`} type="button" area-lebel="Редактировать профиль" onClick={handleEdit}>Редактировать</button>
-                        <button className={`${isDisabled ? 'profile__submit-button profile__submit-button_exit' : 'profile__submit-button_hidden'}`} type="button" area-lebel="Выйти из аккаунта">Выйти из аккаунта</button>
+                        {errors?.email && <span className='profile__text profile__text_error'>{errors.email.message}</span>}
+                        <span className={`${isDisabled ? 'profile__text profile__text_error' : 'profile__text_visible'}`}>{message}</span>
+                        <button className={`${isDisabled ? 'profile__submit-button' : 'profile__submit-button profile__submit-button_hidden'}`}
+                            type="submit"
+                            area-lebel="Редактировать профиль"
+                            onClick={onEdit}>Редактировать
+                        </button>
+                        <button className={`${isDisabled ? 'profile__submit-button profile__submit-button_exit' : 'profile__submit-button_hidden'}`}
+                            type="button"
+                            area-lebel="Выйти из аккаунта"
+                            onClick={handleSignOut}>Выйти из аккаунта
+                        </button>
+                        <button className={
+                            `${isDisabled ? 'profile__submit-button_hidden' : isDirty ? 'profile__submit-button_save ' : 'profile__submit-button_save profile__submit-button_save_disable'}`}
+                            type="submit"
+                            disabled={!isDirty || !isValid}>Сохранить
+                        </button>
                     </form>
                 </section>
             </main>
